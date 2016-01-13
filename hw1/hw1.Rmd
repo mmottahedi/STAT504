@@ -50,7 +50,7 @@ R and SAS code is provided on ANGEL. See hw1. R and hw1_ help. SAS .
 
 estimated population proportion: $\hat{p}= \frac{344}{1170} = `r 344/1170`$
 
-estimated standard error: $\hat{SE} = \frac{\sqrt{\hat{p} (1 - \hat{p})}}{\sqrt{n}} = `r sqrt( (344/1170) * (1 - (344/1170))) /sqrt(2000)`$
+estimated standard error: $\hat{SE} = \frac{\sqrt{\hat{p} (1 - \hat{p})}}{\sqrt{n}} = `r (sqrt( (344/1170) * (1 - (344/1170)))) /sqrt(1170)`$
 
 (b) Conduct significance test to determine whether a majority of the population
 would say Yes. Report and interpret the p-value.
@@ -59,9 +59,9 @@ $H_0: p <= 0.5$
 
 $H_A: p> 0.5$
 
-$Z = \frac{\overline{p} - 0.5}{\hat{SE}}= \frac{0.02940171 - 0.05}{0.0101875}= `r (0.02940171 - 0.05)/0.0101875`$
+$Z = \frac{\overline{p} - 0.5}{\hat{SE}}= \frac{0.02940171 - 0.05}{0.0133196}= `r (0.2940171 - 0.5)/0.0133196`$
 
-${p-value} = `r pnorm((0.02940171 - 0.05)/0.0101875)` < 0.05$
+${p-value} = `r pnorm((0.2940171 - 0.5)/ 0.0133196)` < 0.05$
 
 (c) Construct and interpret 99% confidence interval for the population proportion
 who would say Yes. Here you should construct a classical confi-
@@ -70,7 +70,7 @@ with this approach
 
 $\hat{p}= \frac{344}{1170} = `r 344/1170`$
 
-$\hat{SE} = \frac{\sqrt{\hat{p} (1 - \hat{p})}}{\sqrt{n}} = `r sqrt( (344/1170) * (1 - (344/1170))) /sqrt(2000)`$
+$\hat{SE} = \frac{\sqrt{\hat{p} (1 - \hat{p})}}{\sqrt{n}} = `r (sqrt( (344/1170) * (1 - (344/1170)))) /sqrt(1170)`$
 
-(`r 0.2940171 - 2.58 * 0.0101875` , `r 0.2940171 + 2.58 * 0.0101875`)
+(`r 0.2940171 - qnorm(.99) * 0.0133196` , `r 0.2940171 + qnorm(.99) * 0.0133196`)
 
