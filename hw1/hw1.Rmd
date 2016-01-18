@@ -4,15 +4,21 @@ author: "Mohammad Mottahedi"
 date: "January 13, 2016"
 output: pdf_document
 ---
+
+```{r}
+set.seed(1234)
+```
+
 __Problem 1__ (16 points). Which scale of measurement is most appropriate
 for the following variables?
+
 (a) Treatment group (treatment or control) in a clinical trial?
 
 answer: Binary variable.
 
 (b) Age range in a clinical trial?
 
-answer: Interval variables.
+answer: Continuous variables grouped into small number of categories.
 
 (c) Geographic location (North America, Southeast Asia, Europe)?
 
@@ -38,7 +44,7 @@ $p(y) = \frac{e^{-\mu}\mu^y}{y!}=\frac{e^{-0.2} 0.2^ 5}{5!}= `r dpois(5, 0.2)`, 
 
 There are 100 (independent) 10x10 $km^2$ region in a 100x100 $km^2$  region, number of ships in each of the 100 regions has possion distrubiton $\mu = 0.2$ $(X_i)$. The sum $X_1 +...+ X_{100}$ has the poisson distribuiton with mean $\mu_{total} = \mu_1 + ... + \mu_{100} =  `r 100 * 0.2`$.
 
-$p(y)= `r sum(dpois(1:5, 20))`$
+$p(y)= p(y=0) + p(y=2) + p(y=3) + p(y=4) + p(y=5) =  `r sum(dpois(0:5, 20))`$
 
 
 __Problem 3__ (18 points). When the 2000 General Social Survey asked subjects
@@ -50,7 +56,7 @@ R and SAS code is provided on ANGEL. See hw1. R and hw1_ help. SAS .
 
 estimated population proportion: $\hat{p}= \frac{344}{1170} = `r 344/1170`$
 
-estimated standard error: $\hat{SE} = \frac{\sqrt{\hat{p} (1 - \hat{p})}}{\sqrt{n}} = `r (sqrt( (344/1170) * (1 - (344/1170)))) /sqrt(1170)`$
+estimated standard error: $\hat{SE} = \frac{\sqrt{\hat{p} (1 - \hat{p})}}{\sqrt{n}} = `r sqrt( ((344/1170) * (1 - (344/1170))) / 1170)`$
 
 (b) Conduct significance test to determine whether a majority of the population
 would say Yes. Report and interpret the p-value.
@@ -59,9 +65,11 @@ $H_0: p <= 0.5$
 
 $H_A: p> 0.5$
 
-$Z = \frac{\overline{p} - 0.5}{\hat{SE}}= \frac{0.02940171 - 0.05}{0.0133196}= `r (0.2940171 - 0.5)/0.0133196`$
+$Z = \frac{\overline{p} - 0.5}{\hat{SE}}= \frac{0.2940171 - 0.5}{0.0133196}= `r (0.2940171 - 0.5)/0.0133196`$
 
-${p-value} = `r pnorm((0.2940171 - 0.5)/ 0.0133196)` < 0.05$
+${p-value} = `r 1 - pnorm((0.2940171 - 0.5)/ 0.0133196)` > 0.05$
+
+it's very likely to see value as low as 0.29 so we can't reject the null hypothesis. 
 
 (c) Construct and interpret 99% confidence interval for the population proportion
 who would say Yes. Here you should construct a classical confi-
@@ -73,4 +81,136 @@ $\hat{p}= \frac{344}{1170} = `r 344/1170`$
 $\hat{SE} = \frac{\sqrt{\hat{p} (1 - \hat{p})}}{\sqrt{n}} = `r (sqrt( (344/1170) * (1 - (344/1170)))) /sqrt(1170)`$
 
 (`r 0.2940171 - qnorm(.99) * 0.0133196` , `r 0.2940171 + qnorm(.99) * 0.0133196`)
+
+
+
+__Problem 4__ (20 points). Each of 100 multiple-choice questions on an exam
+has four possible answers, one of which is correct. For each question, a
+student guesses by selecting an answer randomly.
+
+(a) Specify the distribution of the students number of correct answers.
+
+is binomial with probability mass fucntion
+$p(y) = \frac{100!}{[y!(100-y)!]} 0.25^y (0.75)^{100-y}$
+
+(b) Find the mean and standard deviation of that distribution. Would it be
+surprising if the student made at least 50 correct responses? Why?
+
+$E(Y)= n \pi = 100(\frac{1}{4}) = 25$ , $\sigma = \sqrt{n \pi(1 - \pi)} = \sqrt{ 100 \frac{1}{4}(1 - \frac{1}{4})} = `r sqrt(100 * 1/4 * 3/4)`$ 
+
+Hypothesis testing:
+
+$H_0: \mu \ge 50$,
+$H_A: \mu < 50$
+
+$Z = \frac{25 - 50}{4.330127/\sqrt(100)} = `r (25 - 50)/ (4.330127 / sqrt(100))`$
+
+$p-value = `r pnorm((25 - 50)/ (4.330127 / sqrt(100)) )` < 0.05$ , yes it's suprising and it's unlikely to see 25 correct answers if the null hypothesis is correct, so we reject the null hypothesis.
+
+(c) Specify the distribution of $(n_1 , n_2 , n_3 , n_4 )$ where $n_j$ is the number of
+times the student picked choice j.
+
+Multinomial distrubiton 
+
+$p(n_1, n_2, n_3, n_4) = (\frac{n!}{n_1! n_2! n_3! n_4!}) \pi_1^{n_1} \pi_2^{n_2} \pi_3^{n_3} \pi_4^{n_4}$
+
+
+(d) Find the mean of n j , the variance of n j , the covariance between n j and
+n k and the correlation between n j and n k .
+
+$E(n_j) = n \pi_j = 100(1/4) = 25$
+
+$var(n_j) = n \pi_j (1 - \pi_j) = `r 100 * 1/4 * 3/4`$
+
+$$\mathbf{cov} = \left[\begin{array}
+{rrrr}
+18.75 & -6.25 & -6.25 & -6.25 \\
+-6.25 & 18.75 & -6.25 & -6.25 \\
+-6.25 & -6.25 & 18.75 & -6.25 \\
+-6.25 & -6.25 & -6.25 & 18.75
+\end{array}\right]
+$$
+
+
+
+__Problem 5__ (30 points). Let X be the number of Chargers (San Diegos
+NFL team) fans observed in a random sample of n = 30 graduate students
+at Penn State. It is reasonable to assume that X ~ Bin(30; p). The true
+proportion p is unknown, but it is likely to be small (especially in comparison
+to potential number of Pittsburgh Steelers fans).
+Note: Some helpful R and SAS code is provided on ANGEL; see hw1. R
+and hw1_ help. sas . For plotting likelihood there is only R code.
+
+(a) Assume for now that p = 0.04. Find the mean, the variance, and the
+standard deviation of X. Find the probability for each of the following
+events X = 0, X = 1, X = 2, X = 3, and X >= 4. You can do this by
+hand, or use R or SAS.
+
+$E(X) = np = `r 0.04 * 30`$,
+$var(X) = np(1-p) = `r (30 * 0.04 * (1 - 0.04))`$
+
+$p(X=0) = `r dbinom(0,30,0.04)`$
+
+$p(X=1) = `r dbinom(1,30,0.04)`$
+
+$p(X=2) = `r dbinom(2,30,0.04)`$
+
+$p(X=3) = `r dbinom(3,30,0.04)`$
+
+$p(X \ge 4) = `r sum(dbinom(4:30,30,0.04))`$
+
+(b) The classic (Wald) approximate 95% confidence interval for p given in
+the most textbooks is 
+
+$\hat{p} \pm 1.96 \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$
+
+where $\hat{p} = X/n$. When does this interval become degenerate (i.e. when
+are the lower and the upper bounds are the same)? If the true p was
+actually 0.04, could this interval actually cover the true parameter 95%
+of the time? Why or why not? (Hint: based on part (a), how often
+would the interval become degenerate at zero?)
+
+The interval is degenerate when $\hat{p}$ is close to 0 or 1. $\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}=0 \to \hat{p}(1-\hat{p})=0$.
+
+
+with $p=0.04$ the 95% confidence interval is $(`r 0.04 - sqrt(0.04 *(1- 0.04) / 30)` , `r 0.04 - sqrt(0.04 *(1- 0.04) / 30)`)$ and does not cover the 0.04.
+
+
+
+
+(c) Suppose that we observe two Chargers fans in the sample. Plot the
+log-likelihood function for p over a range of values from p = 0.01 to
+p = 0.20. Find the ML estimate and the value of the loglikelihood at $\hat{p}$.
+Calculate the approximate 95% confidence interval for p based on the
+expected information.
+
+$l(p|x) = xlog(p) + (n-x)log(1-p)$
+
+$X=2, n=30$
+
+$l(p|x) = 2log(p) + (28)log(1-p)$
+
+```{r}
+p = seq(from=0.01, to=0.2, by=0.01)
+y = 2 * log(p) + 28 * log(1-p)
+plot(p, y, xlab="", ylab="log-likelihood", type="l")
+```
+
+log-likelihood at $l(\hat{p} = `r 2/30`) = `r 2 * log(2/30) + 28 * log(1 - 2/30)`$ 
+
+
+$I(p) = \frac{n}{p(1-p)}$
+
+95% confidence interval for p: $\hat{p} \pm 1.96 \sqrt{\frac{\hat{p}(1-\hat{p})}{n}} = (`r 2/30 - 1.96 * sqrt(2/30 * (1 - 2/30) / 30)` , `r 2/30 + 1.96 * sqrt(2/30 * (1 - 2/30) / 30)` )$
+
+
+
+(d) Plot the log-likelihood function with respect to the transformed parameter over a range of  values from. Comment on this plot in comparison to the one in part (b).
+
+(e) What is the 95% confidence interval for based on the expected infor-
+mation, and then transform the end points back to scale of p.
+
+(f) Now find an approximate 95% confidence interval based on the LR
+method, and compare it to the two other intervals calculated above.
+Which one is the most appropriate and why?
 
