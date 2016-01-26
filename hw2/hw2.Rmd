@@ -1,0 +1,305 @@
+---
+title: "hw2"
+author: "Mohammad Mottahedi"
+date: "January 26, 2016"
+output: pdf_document
+---
+
+```{r}
+set.seed(1234)
+```
+__Problem 5__ (30 points). Let X be the number of Chargers (San Diegos
+NFL team) fans observed in a random sample of n = 30 graduate students
+at Penn State. It is reasonable to assume that X ~ Bin(30; p). The true
+proportion p is unknown, but it is likely to be small (especially in comparison
+to potential number of Pittsburgh Steelers fans).
+Note: Some helpful R and SAS code is provided on ANGEL; see hw1. R
+and hw1_ help. sas . For plotting likelihood there is only R code.
+
+(a) Assume for now that p = 0.04. Find the mean, the variance, and the
+standard deviation of X. Find the probability for each of the following
+events X = 0, X = 1, X = 2, X = 3, and X >= 4. You can do this by
+hand, or use R or SAS.
+
+$E(X) = np = `r 0.04 * 30`$,
+$var(X) = np(1-p) = `r (30 * 0.04 * (1 - 0.04))`$
+
+$p(X=0) = `r dbinom(0,30,0.04)`$
+
+$p(X=1) = `r dbinom(1,30,0.04)`$
+
+$p(X=2) = `r dbinom(2,30,0.04)`$
+
+$p(X=3) = `r dbinom(3,30,0.04)`$
+
+$p(X \ge 4) = `r sum(dbinom(4:30,30,0.04))`$
+
+(b) The classic (Wald) approximate 95% confidence interval for p given in
+the most textbooks is 
+
+$\hat{p} \pm 1.96 \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$
+
+where $\hat{p} = X/n$. When does this interval become degenerate (i.e. when
+are the lower and the upper bounds are the same)? If the true p was
+actually 0.04, could this interval actually cover the true parameter 95%
+of the time? Why or why not? (Hint: based on part (a), how often
+would the interval become degenerate at zero?)
+
+The interval is degenerate when $\hat{p}$ is close to 0 or 1. $\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}=0 \to \hat{p}(1-\hat{p})=0$.
+
+
+with $p=0.04$ the 95% confidence interval is $(`r 0.04 - sqrt(0.04 *(1- 0.04) / 30)` , `r 0.04 - sqrt(0.04 *(1- 0.04) / 30)`)$ and does not cover the 0.04.
+
+
+
+
+(c) Suppose that we observe two Chargers fans in the sample. Plot the
+log-likelihood function for p over a range of values from p = 0.01 to
+p = 0.20. Find the ML estimate and the value of the loglikelihood at $\hat{p}$.
+Calculate the approximate 95% confidence interval for p based on the
+expected information.
+
+$l(p|x) = xlog(p) + (n-x)log(1-p)$
+
+$X=2, n=30$
+
+$l(p|x) = 2log(p) + (28)log(1-p)$
+
+```{r}
+p = seq(from=0.01, to=0.2, by=0.01)
+y = 2 * log(p) + 28 * log(1-p)
+plot(p, y, xlab="", ylab="log-likelihood", type="l")
+```
+
+log-likelihood at $l(\hat{p} = `r 2/30`) = `r 2 * log(2/30) + 28 * log(1 - 2/30)`$ 
+
+
+$I(p) = \frac{n}{p(1-p)}$
+
+95% confidence interval for p: $\hat{p} \pm 1.96 \sqrt{\frac{\hat{p}(1-\hat{p})}{n}} = (`r 2/30 - 1.96 * sqrt(2/30 * (1 - 2/30) / 30)` , `r 2/30 + 1.96 * sqrt(2/30 * (1 - 2/30) / 30)` )$
+
+
+
+(d) Plot the log-likelihood function with respect to the transformed parameter over a range of  values from. Comment on this plot in comparison to the one in part (b).
+
+logit transformation: $\phi = log(\frac{p}{1-p})$
+
+$l(p|x) = xlog(p) + (n-x)log(1-p)$
+
+$l(\phi|x) = x \phi + n log( \frac{1}{1 + e^{\phi}})$
+
+$x=2, n=30$ 
+```{r}
+phi = seq(-4.6,-1.39, .01)
+l = 2 * (phi) + 30 * log(1 / (1 + exp(phi)) )
+plot(phi, l, type = 'l')
+#par(new = T)
+#plot(p, y, xlab="", ylab="log-likelihood", type="l")
+
+
+```
+
+The transformed scale is less skewed compared to the plot in part C. 
+
+(e) What is the 95% confidence interval for based on the expected information, and then transform the end points back to scale of p.
+
+Fisher information for logit $\phi$
+
+$I( \hat{\phi} ) = \frac{ I(\hat{\theta}) }{ [ \phi^{'} ( \hat{\theta}) ]^2}$
+
+$\phi = \phi \pm 1.96 \sqrt{ \frac{1}{I(\hat{\phi})} }$
+
+$\phi^{'} ( \hat{\theta}) = \frac{1}{\theta (1-\theta)}$
+
+$\phi = `r log((2/30)/ (1-2/30))` \pm 1.96 `r sqrt(1/(30 * 2/30 * (1 - 2/30) ))` = ( `r log((2/30)/ (1-2/30)) - 1.96 * sqrt(1/(30 * 2/30 * (1 - 2/30) ))`, `r log((2/30)/ (1-2/30)) + 1.96 * sqrt(1/(30 * 2/30 * (1 - 2/30) ))` )$
+
+transforming the confidence interval to original scale:
+
+$( `r exp(-4.0736304) / (1 + exp(-4.0736304))`, `r exp(-1.2044842)/ (1 + exp(-1.2044842))` )$
+
+
+
+(f) Now find an approximate 95% confidence interval based on the LR
+method, and compare it to the two other intervals calculated above.
+Which one is the most appropriate and why?
+
+$l(p|x) = xlog(p) + (n-x)log(1-p)$
+
+$x=2, n=30$
+
+$l(p|x) = 2log(p) + (28)log(1-p)$
+
+```{r}
+p = seq(from=0.01, to=0.2, by=0.01)
+y = 2 * log(p) + 28 * log(1-p) 
+plot(p, y, xlab="", ylab="log-likelihood", type="l")
+abline(-9.2679008,0)
+abline(v = 0.1919152)
+abline(v = 0.01139688)
+```
+
+log-likelihood at $l(\hat{p} = `r 2/30`) = `r 2 * log(2/30) + 28 * log(1 - 2/30)`$ 
+
+LR confidence interval:
+$2[l(\hat{\theta}|x) - l(\theta|x)] \le 3.85$
+
+$l(\theta|x) \ge l(\hat{\theta}|x) - 1.92 = `r 2 * log(2/30) + 28 * log(1 - 2/30) - 1.92`$
+
+```{r}
+l = function(p) {2 * log(p) + 28 * log(1 - p) + 9.2679008}
+uniroot(l, c(0.01,0.1))[1]
+uniroot(l, c(0.1,0.3))[1]
+```
+95% confidence interval: $(0.01139688,0.1919152)$
+
+
+
+
+
+__1.__ (20 pts) For each of the following scenarios, say whether the binomial distribution is a reasonable probability model for X. If yes, explain why you think the assumptions of
+binomial are satisifed. If no, explain how you think the assumptions are violated. How
+could you test data to see if your answer was reasonable?
+
+(a) After warming up with a few throws, you throw a dart at a dartboard 20 times. Let
+X be the number of times you hit it out of 30 flips.
+
+Yes, the number of trials are fixed ($n=20$) and each event has two possible outcome (hit, miss) and the outcome of each throw is independent of other throws.
+
+(b) After a warm-up, you throw a dart at a dartboard 20 times at a competition, then
+1000 times as practice, then again for 20 times at a competition. Let X be the
+number of times you hit it out of 40 competition throws.
+
+No, the first and second 20 throw are individually binomial but if we assume that the 1000 practice throws will change the probability of success in each throw the combined 40 throws can be considered as binomial since its violates independent and identical events/trials assumption.
+
+(c) A survey firm draws a random sample of 15 households in State College. Two adults
+from each household are asked, “Are you generally optimistic about the upcoming
+years if Donald Trump is elected President?.” Let X be the number out of 30 who
+said “Yes”.
+
+No, since the opinion of the first sampled adult in the one households suggest similar answer to the survey by the second adult the trials are not independent of each other.
+
+(d) A survey firm draws a random sample of 30 households in State College containing
+two or more adults. In each one, one adult member of the household is asked,
+“Are you generally optimistic about the upcoming years if Donald Trump is elected
+President?.” Let X be the number out of 30 who said “Yes”.
+
+Yes, since the adults in the sample have equal chance to be in the sample the assumption for bionomial distribution holds.
+
+__2.__ (20 pts) For each of the following scenarios, say whether a Poisson model for the sample
+(X 1 , X 2 , ..., X n ) may be appropriate.
+
+(a) Let say that in the Pennsylvania state lottery game Mega Millions, any player may
+win with probability 1 out of 2 million independently of other players. Also, sup-
+pose that the number of players each week is always equal to a constant N . Let
+X 1 , X 2 , ..., X n be the number of Mega Millions winners in the first n weeks of
+2010.
+
+Yes, the Poisson distribution assumptions holds. Events are independent (if someones wins it doesn't affect the chance of wining for others). the homogeniety hold beacause the number of players is constant each weak and the each player has equal probability to win. 
+
+(b) Now suppose the scenario as above, but the number of players N varies substantially
+from week to week.
+
+if N varies and probability of wining is still 1 in 2 Million, the expected number of winners each week cannot be the same anymore and the assumtpion of homogeneity is violated.
+
+(c) Let X 1 , X 2 , ..., X 12 be the number of cars arriving at a toll booth on a major highway during 12 consecutive hours in a single day.
+
+No, it is expected that the 12 consecutive time interval have different means due to rush hours in the morning and afternoon or other variables.
+
+(d) Let X 1 , X 2 , ..., X 48 be the number of cars arriving at the toll booth between hours
+of 1 and 2 pm on 48 Fridays in a single year (excluding holidays).
+
+Yes, since each time interval is defined between 1 and 2 pm every friday we expect to have equal mean during each time interval.
+
+
+__3.__ (20 pts) Census figures show that the racial/ethnic distribution of persons eligible for jury duty in a large urban county is given by this table:
+
+|Black |Hispanic |Other|
+|----:|:-----:|:-----|
+|20% |15%  | 65%|
+
+
+From this county, 182 persons were summoned to appear for jury duty on a particular day. The observed racial/ethnic distribution of this sample is shown below.
+
+|Black |Hispanic |Other|
+|----:|:-----:|:-----|
+|45 |35  | 102|
+
+
+Is it likely that this is a random sample from the eligible population? If not, how does the sample differ from the population? (Be sure to calculate $\chi^2$ , $G^2$ , residuals, and comment on the appropriateness of the $\chi^2$  approximation, that is of $\chi^2$  sampling distribution.)
+
+$H_0 : (\pi_1, \pi_2, \pi_3) = (0.2, 0.15, 0.65)$
+
+$H_A : (\pi_1, \pi_2, \pi_3) \ne (0.2, 0.15, 0.65)$
+
+$\chi^2 = \sum_{j=1}^{k} \frac{(X_j - n \hat{\pi_j})^2}{n \hat{\pi_j}}$
+
+
+```{r}
+test <- chisq.test(c(45, 35, 102), p= c(0.2, 0.15, 0.65))
+
+s <- c(45, 35, 102); count <- 182 * c(0.2, 0.15, 0.65)
+
+x2 <- sum( (s - count)^2 / count )
+g2 <- 2 * sum( s * log( s / count )  )
+```
+$\chi^2 = `r test$statistic`$,
+$G^2 = `r g2`$
+
+$\chi^2$ and $G^2$ are close.
+
+$dof = 2$
+
+$p(\chi^2_2 \ge `r x2` ) = `r 1 - pchisq(x2,2)`$
+
+$p(G^2_2 \ge `r g2` ) = `r 1 - pchisq(g2,2)`$
+
+p-values for both $G^2$ and $\chi^2$  are less than $\alpha = 0.05$. 
+
+We can reject the null hypothesis and it's not likely that the sample is from the eligible population.
+
+The values of $\chi^2$ and $G^2$ are not large so the model is not that bad but we cannot say that the sample is  from the eligible population.
+
+
+__4.__ (20 pts) R. A. Fisher, in a now-famous analysis of the results of Mendel’s breeding experiments, concluded that the data were too good to be true as the data fit Mendel’s theory
+far better than one would expect. In one pea breeding experiment, Mendel hypothesized
+that four categories of peas: smooth yellow, wrinkled yellow, smooth green, and wrinkled
+green, should occur with relative frequencies 9:3:3:1. The observed frequencies reported
+by Mendel from this trial are shown below.
+
+|Type of pea |count|
+|:----:|:-----:|
+|Smooth yellow|315|
+|Wrinkled yellow| 101|
+|Smooth green|108|
+|Wrinkled green|32|
+
+Perform a goodness-of-fit test to show that these data fit the theory too well. Perform your
+analysis in the software of your choice and make sure to included relevant edited portions
+of the output.
+
+__5.__ (20 pts) Below is a table of 100 values of a random variable X drawn from a discrete
+distribution. For example, X could be the number of cars passing a point on a road from
+1:00pm to 1:10pm on 100 consecutive weekdays, or the number of orders arriving at an
+exchange from 1:00:00.00pm to 1:00:00.01pm during 100 consecutive weekdays.
+
+x
+0
+1
+2
+3
+4
+> 5
+count
+22
+36
+20
+16
+3
+3
+
+Perform the X 2 and G 2 goodness-of-fit tests to see if these data are Poisson. The last
+category ( 5), indicates that outcomes where the count was 6 and higher were rare so
+we collapsed them to the category (x  5). Also compute and explain the MLE of the
+rate and the expected counts.
+
+
