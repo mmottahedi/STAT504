@@ -16,69 +16,6 @@ to potential number of Pittsburgh Steelers fans).
 Note: Some helpful R and SAS code is provided on ANGEL; see hw1. R
 and hw1_ help. sas . For plotting likelihood there is only R code.
 
-(a) Assume for now that p = 0.04. Find the mean, the variance, and the
-standard deviation of X. Find the probability for each of the following
-events X = 0, X = 1, X = 2, X = 3, and X >= 4. You can do this by
-hand, or use R or SAS.
-
-$E(X) = np = `r 0.04 * 30`$,
-$var(X) = np(1-p) = `r (30 * 0.04 * (1 - 0.04))`$
-
-$p(X=0) = `r dbinom(0,30,0.04)`$
-
-$p(X=1) = `r dbinom(1,30,0.04)`$
-
-$p(X=2) = `r dbinom(2,30,0.04)`$
-
-$p(X=3) = `r dbinom(3,30,0.04)`$
-
-$p(X \ge 4) = `r sum(dbinom(4:30,30,0.04))`$
-
-(b) The classic (Wald) approximate 95% confidence interval for p given in
-the most textbooks is 
-
-$\hat{p} \pm 1.96 \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$
-
-where $\hat{p} = X/n$. When does this interval become degenerate (i.e. when
-are the lower and the upper bounds are the same)? If the true p was
-actually 0.04, could this interval actually cover the true parameter 95%
-of the time? Why or why not? (Hint: based on part (a), how often
-would the interval become degenerate at zero?)
-
-The interval is degenerate when $\hat{p}$ is close to 0 or 1. $\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}=0 \to \hat{p}(1-\hat{p})=0$.
-
-
-with $p=0.04$ the 95% confidence interval is $(`r 0.04 - sqrt(0.04 *(1- 0.04) / 30)` , `r 0.04 - sqrt(0.04 *(1- 0.04) / 30)`)$ and does not cover the 0.04.
-
-
-
-
-(c) Suppose that we observe two Chargers fans in the sample. Plot the
-log-likelihood function for p over a range of values from p = 0.01 to
-p = 0.20. Find the ML estimate and the value of the loglikelihood at $\hat{p}$.
-Calculate the approximate 95% confidence interval for p based on the
-expected information.
-
-$l(p|x) = xlog(p) + (n-x)log(1-p)$
-
-$X=2, n=30$
-
-$l(p|x) = 2log(p) + (28)log(1-p)$
-
-```{r}
-p = seq(from=0.01, to=0.2, by=0.01)
-y = 2 * log(p) + 28 * log(1-p)
-plot(p, y, xlab="", ylab="log-likelihood", type="l")
-```
-
-log-likelihood at $l(\hat{p} = `r 2/30`) = `r 2 * log(2/30) + 28 * log(1 - 2/30)`$ 
-
-
-$I(p) = \frac{n}{p(1-p)}$
-
-95% confidence interval for p: $\hat{p} \pm 1.96 \sqrt{\frac{\hat{p}(1-\hat{p})}{n}} = (`r 2/30 - 1.96 * sqrt(2/30 * (1 - 2/30) / 30)` , `r 2/30 + 1.96 * sqrt(2/30 * (1 - 2/30) / 30)` )$
-
-
 
 (d) Plot the log-likelihood function with respect to the transformed parameter over a range of  values from. Comment on this plot in comparison to the one in part (b).
 
@@ -191,8 +128,7 @@ __2.__ (20 pts) For each of the following scenarios, say whether a Poisson model
 (a) Let say that in the Pennsylvania state lottery game Mega Millions, any player may
 win with probability 1 out of 2 million independently of other players. Also, sup-
 pose that the number of players each week is always equal to a constant N . Let
-X 1 , X 2 , ..., X n be the number of Mega Millions winners in the first n weeks of
-2010.
+X 1 , X 2 , ..., X n be the number of Mega Millions winners in the first n weeks of 2010.
 
 Yes, the Poisson distribution assumptions holds. Events are independent (if someones wins it doesn't affect the chance of wining for others). the homogeniety hold beacause the number of players is constant each weak and the each player has equal probability to win. 
 
@@ -257,7 +193,13 @@ p-values for both $G^2$ and $\chi^2$  are less than $\alpha = 0.05$.
 
 We can reject the null hypothesis and it's not likely that the sample is from the eligible population.
 
-The values of $\chi^2$ and $G^2$ are not large so the model is not that bad but we cannot say that the sample is  from the eligible population.
+looking at the residuals we see that the absolute value of the residuals are close to 1.4 and it's slightly higher for hispanic and others.
+```{r}
+df <- data.frame(residuals=test$residuals, observed = test$observed, expected= test$expected)
+df
+```
+
+The values of $\chi^2$ and $G^2$ are large so the model is not tha good and we cannot say that the sample is from the eligible population.
 
 
 __4.__ (20 pts) R. A. Fisher, in a now-famous analysis of the results of Mendel’s breeding experiments, concluded that the data were too good to be true as the data fit Mendel’s theory
@@ -277,29 +219,89 @@ Perform a goodness-of-fit test to show that these data fit the theory too well. 
 analysis in the software of your choice and make sure to included relevant edited portions
 of the output.
 
+
+$H_0 : (\pi_{sy}, \pi_{wy}, \pi_{sg}, \pi_{wg}) = (0.5625 0.1875 0.1875 0.0625)$
+
+$H_A : (\pi_{sy}, \pi_{wy}, \pi_{sg}, \pi_{wg}) \ne (0.5625 0.1875 0.1875 0.0625)$
+
+$\chi^2 = \sum_{j=1}^{k} \frac{(X_j - n \hat{\pi_j})^2}{n \hat{\pi_j}}$
+
+
+```{r}
+s <- c(315, 101, 108, 32); count <- sum(315, 101, 108, 32) * c(0.5625, 0.1875, 0.1875, 0.0625)
+
+test <- chisq.test(s, p= c(0.5625, 0.1875, 0.1875, 0.0625))
+test
+x2 <- sum( (s - count)^2 / count )
+g2 <- 2 * sum( s * log( s / count )  )
+```
+$\chi^2 = `r test$statistic`$,
+$G^2 = `r g2`$
+
+$\chi^2$ and $G^2$ are close.
+
+$dof = 3$
+
+$p(\chi^2_3 \ge `r x2` ) = `r 1 - pchisq(x2,3)`$
+
+$p(G^2_3 \ge `r g2` ) = `r 1 - pchisq(g2,3)`$
+
+The the pearson and deviance statistics are so small that we can the it seems to good and the data may have been fabricated or altered.
+
+
 __5.__ (20 pts) Below is a table of 100 values of a random variable X drawn from a discrete
 distribution. For example, X could be the number of cars passing a point on a road from
 1:00pm to 1:10pm on 100 consecutive weekdays, or the number of orders arriving at an
 exchange from 1:00:00.00pm to 1:00:00.01pm during 100 consecutive weekdays.
 
-x
-0
-1
-2
-3
-4
-> 5
-count
-22
-36
-20
-16
-3
-3
+|x |count|
+|:----:|:-----:|
+|0 |22|
+|1 |36|
+|2 |20|
+|3 |16|
+|4 |3|
+|$\ge$ 5| 3|
 
-Perform the X 2 and G 2 goodness-of-fit tests to see if these data are Poisson. The last
-category ( 5), indicates that outcomes where the count was 6 and higher were rare so
-we collapsed them to the category (x  5). Also compute and explain the MLE of the
+
+Perform the $\chi^2$ and $G^2$ goodness-of-fit tests to see if these data are Poisson. The last
+category ( $\ge$ 5), indicates that outcomes where the count was 6 and higher were rare so
+we collapsed them to the category (x  $\ge$ 5). Also compute and explain the MLE of the
 rate and the expected counts.
 
+estimating the mean of Poisson ditribution using MLE:
 
+$\hat{\lambda} = n^{-1} \sum_{i=1}^n y_i$
+
+The cell $\ge 5$ is broken into two two cells (=5, =6) with two and one observation respectively.
+
+The expected value is  $E_i = n \hat{\pi_i}$.
+
+
+
+```{r}
+ob <- c(22, 36, 20, 16, 3, 3)
+
+lambda_hat <- c( 0 * 22 + 1 * 36 + 2 * 20 + 3 * 16 + 4 * 3 + 2 * 5 + 1 * 6) / 100
+
+p_hat <- dpois(c(0,1,2,3,4), lambda_hat)
+p_hat <- c(p_hat, 1-sum(p_hat))
+ex <- 100 * p_hat
+
+
+X2 <- sum((ob-ex)^2/ex)
+G2 <- 2*sum(ob*log(ob/ex)) 
+
+#dof k-1 -d = 6 - 1 - 1 
+p_X2 <- 1-pchisq(X2,4)  
+p_G2 <- 1-pchisq(G2,4)  
+
+```
+$\chi^2 = `r X2` , G^2 = `r G2`$
+
+
+$p(\chi^2_2 \ge `r X2` ) = `r p_X2`$
+
+$p(G^2_2 \ge `r G2` ) = `r p_G2`$
+
+Since both p-values are less 0.05 there's evidence that the data are not Poisson.
