@@ -1,0 +1,245 @@
+---
+title: "hw3"
+author: "Mohammad Mottahedi"
+date: "February 2, 2016"
+output: pdf_document
+---
+
+```{r}CI_diff2=cbind(diff2-qnorm(0.975)*SE_diff2,diff2+qnorm(0.975)*SE_diff2)
+SE_diff2
+CI_diff2
+set.seed(1235)
+```
+
+__1.__ (5 pts) The probability simplex for the four possible outcomes of two binary random variables is a tetrahedron. Draw the independence surface (the set of probability distributions
+corresponding to the independence model for a 2 ×2 table) inside the tetrahedron. What
+does it mean for the empirical distribution to be above or below this surface?
+
+![alt text](/home/mfc/Dropbox/Spring 2016/discretDataAnalysis/hw_solutions/hw3/p1.jpg)
+
+The independence surface is the hyperbolic paraboloid in the above picture. 
+Points above independece surface indicates positive association between the two variables and points bellow it indicates and negative association.
+
+
+__2.__ (5 pts) True or False?
+
+(a) In 2 × 2 tables, statistical independence is equivalent to a population odds ratios
+value of $\theta$ = 1. 
+
+True.
+
+(b) With rare events, when population proportions are very close to zero, difference of
+proportions is a better measure of association than the relative risk?
+
+False.
+
+__3.__ (10 pts) Give an example of inferences in a two-way table for which multinomial, product
+multinomial, and Poisson sampling assumptions are appropriate.
+
+Using the incidence of common cold involving french skiers example:
+
+|   |Cold|No Cold|Total|
+|---|----|-------|-----|
+|Placebo|31|109|140|
+|Vitamin C|17|122|139|
+|Totals|48|231|279|
+
+Product multinomial is appropriate for inference about difference of proportion of getting cold given placebo or vitamin C.
+
+Poisson sampling assumption is appropriate for infernece about proportion of skiers having cold and not having cold.
+
+
+
+
+__4.__ (30 pts) For adults who sailed on the Titanic on it fateful voyage, the odds ratio between
+gender (female, male) and survival (yes , no) was 11.4.
+
+(a) What is wrong with the following interpretation: “The probability of survival for
+females was 11.4 times that for males”? Give the correct interpretation.
+
+The odds of survival for women is 11.4 times the odds of survival for men but the probabilities and odds are not the same and the above statement is not correct. The correct intrepretations is that the odds of survival was 11.4 times given the person was a female.
+
+
+(b) The odds of survival for females equaled 2.9. For each gender, find the proportion
+who survived.
+
+$\pi_{s|f} = \frac{odd_f}{1+odd_f} = \frac{2.9}{3.9} = 0.74$
+
+$\theta = \frac{odd_f}{odd_m} = 11.4$
+
+$odd_m = 0.254$ 
+
+$\pi_{s|m} = \frac{odd_m}{1+odd_m} = \frac{0.25}{1.25} = 0.2$
+
+
+(c) Find the value of R in the interpretation, “The probability of survival for females
+was R times that for males”.
+
+$R = \frac{0.74}{0.2} = 3.7$ 
+
+__5.__ (20 pts) A handwriting expert claims to have ability to discern whether a note was written
+by a man or a woman. An experiment was performed in which five men and five women
+submitted handwriting samples. The samples were then presented to the judge (who was
+
+\begin{center}
+Experts classification
+\end{center}
+
+|True gender |Male| Female|
+|---:|:---:|:---|
+|Male| 4 |1 |
+|Female|1|4|
+
+
+told their were five men and five women), and he rendered his opinion on which samples
+were male and which were female.
+
+Perform both approximate and exact tests. What is your conclusion regarding the expert’s
+claim?
+
+the exact test:
+
+$H_0$: expert has no ability to decern odd ratio is equal to 1
+
+$H_A$: expert has no ability to decern odd ratio is less or greater than 1
+
+```{r}
+
+hw <- matrix(c(4,1,1,4), ncol = 2,
+             dimnames = list(True = c("male", "female"), 
+                             expert_classification = c("male", "female")))
+
+fisher.test(hw)
+
+```
+
+there's not enough evidence to reject the null hypothesis.
+
+approximate test:
+
+```{r}
+
+hw <- matrix(c(4,1,1,4), ncol = 2, 
+             dimnames = list(True = c("male", "female"), 
+                             expert_classification = c("male", "female")))
+
+result <- chisq.test(hw, correct = F)
+result
+result$expected
+result$residuals
+LR <- 2*sum(hw*log(hw/result$expected))
+
+```
+
+p-value for $\chi_2$ is greater than 0.05 and we can reject the null hypothesis which is contrary to exact test.
+
+
+__6.__ (30 pts) Sensitivity and specificity are measures often calculated for 2 × 2 tables. These
+measures are of particular interest when you want to determine the efficacy of a screen-
+ing test (e.g. for a disease, lie detection, etc.). To learn a bit about these measures,
+you should read the ”AccuracyHandout.pdf” (see online Lesson 3.1.7: Difference in
+proportions https://onlinecourses.science.psu.edu/stat504/node/
+77). In Agresti(2013) you can find some information in Sec. 2.1.2. Of course, you can
+always search the web, or use other textbooks.
+
+(a) (10 pts) a) How do sensitivity and specificity relate to conditional probabilities, rel-
+ative risk and odds ratios?
+
+sensitivity is the conditional probability of a true positive test and specificity is the conditional probability of a true negative test.
+
+odds ratio can be described as the ratio of sensitivity to specificity.
+
+
+(b) (20 pts) PET scans can be used in diagnosing a certain type of cancer, such as lung
+cancer. Consider following hypothetical data on 150 adults in a mining town:
+
+\begin{center}
+Table 1:default
+
+Test result
+\end{center}
+|Cancer| Positive| Negative|
+|---:|:---:|:---|
+|yes| 65 | 5|
+|no | 3| 77|
+
+
+Are the test results and lung cancer status independent? Report the results of chi-
+squared test of independence, and interpret.
+
+
+```{r}
+
+test <- matrix(c(65,3,5,77), ncol = 2, 
+               dimnames = list(cancer = c("yes", "no"), 
+                               result = c("positive","negative")))
+
+result <- chisq.test(test, correct = F)
+result
+#result$expected
+#result$residuals
+#result$observed
+LR <- 2*sum(test*log(test/result$expected))
+LR
+1 - pchisq(LR, df=1)
+
+```
+the $\chi^2$ value is very large so the independence model is not correct.
+
+Describe the association of the test results and cancer using any of the measures
+of associations you deem appropriate (e.g., difference in proportion, the relative risk
+and the odds ratio) and interpret your findings. Also report the sensitivity, specificity,
+false positive and false negative rates?
+
+```{r}
+require(vcd)
+
+test <- matrix(c(65,3,5,77), ncol = 2, 
+               dimnames = list(cancer = c("yes", "no"), 
+                               result = c("positive","negative")))
+
+
+RowSums=rowSums(test)
+ColSums=colSums(test)
+
+#COLUMN 1 RISK ESTIMATE
+risk1_col1=test[1,1]/RowSums[1]
+risk2_col1=test[2,1]/RowSums[2]
+rho1=risk1_col1/risk2_col1
+total1=ColSums[1]/sum(RowSums)
+
+
+#COLUMN 2 RISK ESTIMATE
+risk1_col2=test[1,2]/RowSums[1]
+risk2_col2=test[2,2]/RowSums[2]
+total2=ColSums[2]/sum(RowSums)
+
+
+
+#relative risk
+rho1=risk1_col1/risk2_col1
+rho2 = risk2_col2/risk1_col2
+rbind(rho1,rho2)
+
+# difference of proportion column two
+diff1=risk2_col1-risk1_col1
+diff2=risk2_col2-risk1_col2
+rbind(risk1_col1,risk2_col1,diff1)
+rbind(risk1_col2,risk2_col2,diff2)
+
+SE_diff2=sqrt(risk1_col2*(1-risk1_col2)/RowSums[1]+risk2_col2*(1-risk2_col2)/RowSums[2])
+CI_diff2=cbind(diff2-qnorm(0.975)*SE_diff2,diff2+qnorm(0.975)*SE_diff2)
+SE_diff2
+CI_diff2
+
+#odds Ratio
+oddsratio(test, log=F)
+exp(confint(oddsratio(test)))
+
+
+#sensitibity 
+65/(65+3)
+
+#specificity
+77/(77+5)
+```
