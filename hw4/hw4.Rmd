@@ -116,12 +116,12 @@ G2
 1 - pchisq(G2, 2)
 
 ```
-both $\chi_2$ and $G^2$ are large with p-value less 0.05. we can reject the null hypothesis and say the variables are not independent.
+both $\chi^2$ and $G^2$ are large with p-value less 0.05. we can reject the null hypothesis and say the variables are not independent.
 
 
 (b) How many measures of association are needed to describe the table’s departure from
 independence? Provide estimates and intervals for the relative risks, and interpret
-the results. Why are you able to make inference about relative risks?c.table[,c(1,2)]
+the results. Why are you able to make inference about relative risks?
 
 We need $(I-1)(J-1)=2$ measure of association to describe the tables departure from independence.
 
@@ -140,17 +140,33 @@ table.1 <- array(data = c(p.hat.row1[1],p.hat.row2[1],p.hat.row1[2],p.hat.row2[2
     dim = c(2,2), dimnames = list(c("carrier", "non-carrier"), 
                                   Tonsil_size = c("normal", "slightly enlarge")))
 table.1
+
+rho1 <- (table.1[1,2]) / (table.1[1,1]) 
+V_logr1 <-  (1-table.1[1,2])/((19+29)*table.1[1,2]) + (1-table.1[1,1])/((497+560)*table.1[1,1])
+ci_low1 <- log(rho1) - 1.96 * sqrt(V_logr1)
+ci_high1 <- log(rho1) + 1.96 * sqrt(V_logr1)
+
 ```
-relative risk: $\rho = \frac{P(carrier|slightly enlarge)}{P(carrier|normal)}= `r (table.1[1,2]) / (table.1[1,1]) `$
+relative risk: $\rho = \frac{P(carrier|slightly enlarge)}{P(carrier|normal)}= `r rho1 `$
+ 
+
+$CI = (`r exp(ci_low1)`,`r exp(ci_high1)`)$
 
 ```{r}
 table.2 <- array(data = c(p.hat.row1[1],p.hat.row2[1],p.hat.row1[3],p.hat.row2[3]),
     dim = c(2,2), dimnames = list(c("carrier", "non-carrier"),
                                   Tonsil_size = c("normal", "very enlarge")))
 table.2
+
+rho2 <- (table.2[1,2]) / (table.2[1,1]) 
+V_logr2 <-  (1-table.2[1,2])/((19+24)*table.2[1,2]) +(1-table.2[1,1])/((497+269)*table.2[1,1])
+ci_low2 <- log(rho2) - 1.96 * sqrt(V_logr2)
+ci_high2 <- log(rho2) + 1.96 * sqrt(V_logr2)
 ```
 
-relative risk: $\rho =  \frac{P(carrier|very enlarge)}{P(carrier|normal)} =  `r (table.2[1,2]) / (table.2[1,1]) `$
+relative risk: $\rho =  \frac{P(carrier|very enlarge)}{P(carrier|normal)} =  `r rho2 `$
+
+$CI = (`r exp(ci_low2)`,`r exp(ci_high2)`)$
 
 risk being carrier increases with increasing tonsil size.
 
@@ -187,7 +203,8 @@ G2.2
 G2.1 + G2.2
 
 ```
-
+sum of the $G^2$ form sub-tables add up to sum of $G^2$ from part a so partitioning works.
+Looking at the $G^2$ calculated for the two sub-tables we can't reject the null hypothesis the variables seems independent from each other.
 
 (d) Now consider ’tonsil size’ to be an ordinal variable. Re-run the analysis, if necessary,
 and report the relevant statistics, your conclusions and compare to what you
@@ -209,6 +226,8 @@ spear.res
 1 - pchisq(spear.res[2], 1)
 
 ```
+
+The $M^2$ value for both case is large and p-value is less than .05. We can reject the null hypothesis of independence and the two variables have a weak linear relationship.
 
 
 __2.__ (25 pts) Get a dataset from
@@ -266,7 +285,7 @@ __3.__ (30 pts) In 1972, a sample of 1,524 adults reported both their current re
 and their religious affiliation at age 16.
 
 (a) Is there any evidence of a change in the rate of Catholic affiliation over time? Find a confidence interval for the rate of change.
-Current affiliation
+
 
 Mcnamar test:
 $H_0: \pi_{12} = \pi_{21}$
@@ -303,7 +322,7 @@ $CI = (`r d-v_d`, `r d+v_d`)$
 Current affiliation
 \end{center}
 
-|Affiliation at age 16| Catholic | Non-Cathotic|
+|Affiliation at age 16| Catholic | Non-Catholic|
 |---------------|------------------|---------|
 |Catholic| 351 |67|
 |Non-Catholic |33 |1073|
@@ -325,7 +344,7 @@ res
 
 
 ```
-No, it's not beneficial the power of the cross-sectional study will have larger $\chi^2$ value.
+no , it's not beneficial the power of the cross-sectional study will have larger $\chi^2$ value and we can reject the null hypothesis with greater power.
 
 
 __4.__ (15 pts) Calculate kappa for a 4 × 4 table having $n_{ii} = 5$ for all i, $n_{i,i+1} = 15, i = 1, 2, 3, n_{41} = 15$, and all other $n_{ij} = 0$. Explain why strong association does not imply
@@ -335,7 +354,7 @@ strong agreement.
 ```{r}
 c.table.5 <- array(data = c(5,0,0,0,15,5,0,0,0,15,5,0,15,0,15,5),
     dim = c(4,4))
-c.table.4
+c.table.5
 
 chisq.test(c.table.5)
 
@@ -344,5 +363,5 @@ chisq.test(c.table.5)
 Kappa(c.table.5)
 
 ```
-It's possible to have strong negative association between to variables but in such a case there's no agreement between variables.
+It's possible to have strong negative association between two variables but in such a case there's no agreement between variables.
 
