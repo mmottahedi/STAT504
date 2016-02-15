@@ -1,0 +1,203 @@
+---
+title: "HW5"
+author: "Mohammad Mottahedi"
+date: "February 13, 2016"
+output: 
+    html_document:
+        toc: true
+        toc_float: 
+            collapsed: false
+            smooth_scroll: false
+---
+
+
+```{r, echo=FALSE}
+set.seed(1234)
+library(grid)
+library(vcd)
+library(manipulate)
+library(DescTools)
+setwd("~/Dropbox/spring2016/discretDataAnalysis/hw_solutions/hw5/")
+```
+
+#Problem 1 
+(40 pts) The table below lists graduate admissions information for the six largest departments at U.C. Berkeley in the fall of 1973. This the example we saw in the lecture notes, and you can use the data files and code provided in Lesson 5.
+
+
+| Dept.| men rejected| men accepted| women rejected| women accepted|
+|----:|--------:|-------:|-------:|----:|---------:|
+|A |313 |512 |19| 89|
+|B |207 |353 |8 |17|
+|C |205 |120 |391 |202|
+|D |278 |139 |244 |131|
+|E |138 |53 |299 |94|
+|F |351 |22 |317 |24|
+
+Let D = department, S =sex,and A = admission status (rejected or accepted).
+
+(a) Give the marginal table S × A. Analyze the marginal table for S x A, reporting the X2 test and odds ratio. Is there any evidence of gender bias in graduate admissions?
+
+
+```{r}
+data("UCBAdmissions")
+admit.gender <- apply(UCBAdmissions, c(1,2), sum) 
+admit.gender / sum(admit.gender)
+chisq.test(admit.gender)
+
+oddsratio(admit.gender,log = F)
+
+exp(confint(oddsratio(admit.gender)))
+
+```
+
+Yes, the independence model is not valid and the odd ratio is not equal to 1 and the it's confidence interval does not include 1.
+
+
+(b) Give the partial table S×A for each level of D. Examine the S×A tables within each
+level of D, reporting the X2
+statistics and odds ratios. Does this contradict what you
+found in part (a)? Why or why not? What is the Cochran-Mantel-Haenszel (CMH)
+statistic for our example? What does this statistic tell you about the relationship
+between admission and gender when adjusting for department?
+
+```{r}
+data("UCBAdmissions")
+
+for (i in 1:6){
+    
+print(paste("Department ",LETTERS[1:6][i]))
+admit.gender <- apply(UCBAdmissions[,,i], c(1,2), sum) 
+admit.gender / sum(admit.gender)
+print(chisq.test(admit.gender))
+
+print(oddsratio(admit.gender,log = F))
+
+print(exp(confint(oddsratio(admit.gender))))
+print("-----------------------------------------------------------")
+}
+
+```
+
+Yes, for departments B, C, D, F, E  either the independence test fails or the odd ratio confidence interval contains 1.
+
+```{r}
+mantelhaen.test(UCBAdmissions, correct = F)
+```
+Since some of the odds ratios are less than 1 and others greater than 1 the CMH test is not appropriate for this case.
+
+
+
+(c) Drop the department ”A” from the analysis, and re-test for the conditional independence
+model. What is the CMH statistic now and what does it tell you about the
+relationship between admission and gender when adjusting for department?
+
+```{r}
+mantelhaen.test(UCBAdmissions[,,2:6], correct = F)
+```
+The $\chi^2$ value is small which means the independence model is a good fit when we drop department A. Also, the common odd ratio is very close to 1 and the 95% confidence interval contains 1.
+
+(d) In the Lesson 5 notes we saw that with the department A in the analysis, the model
+of homogenous associations was rejected (the Breslow-Day statistic =18.83, with
+df=5, p-value=0.0021). Report the Breslow-day statistics for the analysis without
+department A. What is your conclusion now about the this model?
+
+```{r}
+BreslowDayTest(UCBAdmissions[,,2:6])
+```
+
+p-value is equal to 0.64 and we do not have sufficient evidence to reject the null hypothesis which means odds ratios are approximatley identitcal when we drop the A department.
+
+#Problem 2
+
+(15 pts) For three-way contingency tables, when any pair of variables is conditionally independent,
+explain why there is homogenous association. When there is no homogeneous
+association, explain why no pair of variables can be conditionally independent.
+
+Conditinal independence is a special case of homogenous independece. Conditional requires that the odds ratios across the third variable to be equal to 1. The homogenous association only requires that the odds ratios to be equal to each other but to neccesarily equal to 1. When we have coditional independence, it means that the odds ratios are equal to each other and the homogenous independence is satisfied. When there is no homogenous independence it means that it means at least one of the odds ratios is not equal to 1.
+
+
+#Problem 3
+
+(15 pts) State if the the statement is TRUE or FALSE and give an explanation for your
+answer.
+
+Suppose that income (high, low) and gender are conditionally independent, given type of
+job (secretarial, construction, service, professional, etc). Then, income and gender are
+also independent in the 2 × 2 marginal table (i.e., ignoring, rather than controlling, type
+of job).
+
+False, it's is possible that 2x2 marginal table show there's a relationship between income and gender if we don't control for type job.
+
+#Problem 4
+
+(30 pts) Montana Economic Outlook This 1992 Montana poll asked a random sample of
+Montana residents whether their personal financial status was the worse, the same, or better
+than a year ago, and whether they thought the state economic outlook was better over
+the next year. Data and accompanying demographics about the respondents is provided
+in files on ANGEL. The data file contains results for every other person included in the
+poll to reduce the size. The data are given in two formats: montana.xls, and montana.csv.
+There is also montana.sas, as well as montana.R. If you want you can read the data in any
+other format. There are some missing values which you can ignore for this analysis.
+Here is the coding for the data: AGE = 1 under 35, 2 35-54, 3 55 and over
+SEX = 0 male, 1 female
+INC = yearly income: 1 for under $20K, 2 for $20-35K, 3 for over $35K
+POL = 1 Democrat, 2 Independent, 3 Republican
+AREA = 1 Western, 2 Northeastern, 3 Southeastern Montana
+FIN = Financial status 1 worse, 2 same, 3 better than a year ago
+STAT = State economic outlook 0 better, 1 not better than a year ago
+
+```{r}
+montana <- read.csv("montana.csv", header = T, na.strings = ".")
+#montana <- na.omit(montana)
+attach(montana)
+```
+
+(a) Is there a relationship between income and party affiliation? Turn in the appropriate
+statistic, p-value and your conclusion. Report a measure of association such as odds
+ratio(s).
+
+```{r}
+inc_pol <- xtabs(data=montana, ~Inc+Pol)
+inc_pol 
+chisq.test(inc_pol, correct = F)
+oddsratio(inc_pol, log = F)
+exp(confint(oddsratio(inc_pol)))
+
+```
+Independents are 2.4 times more likely to earn less than 25K compared to 
+
+(b) Is there a relationship between gender and feelings about the economic outlook?
+Turn in the appropriate statistic, p-value and the percentage of men and of women
+that feel that the outlook “will be better”.
+
+```{r}
+sex.stat <- xtabs(data=montana, ~Sex+Stat)
+sex.stat
+chisq.test(sex.stat, correct = F)
+oddsratio(sex.stat, log = F)
+exp(confint(oddsratio(sex.stat)))
+
+```
+
+
+(c) What can you say about associations between gender, economic outlook and party
+affiliation? Does the model of complete (mutual) independence fit? State three
+possible conditional independence models for these three variables. Do any of these
+conditional independence model fit? Do your conclusions from (b) change in any
+way?
+
+```{r}
+sex.stat.pol  <- xtabs(data=montana, ~ Sex + Stat + Pol)
+sex.stat.pol
+for (i in 1:3){
+    print("---------------------------------------------------")
+    print(paste("political aff", i))
+    chi.test <- chisq.test(sex.stat.pol[,,i], correct = F)
+    print("expected values")
+    print(chi.test$expected)
+    print(chi.test)
+    print(oddsratio(sex.stat.pol[,,i], log = F))
+    print(exp(confint(oddsratio(sex.stat.pol[,,i]))))
+}
+```
+
