@@ -35,7 +35,8 @@ setwd("~/Dropbox/spring2016/discretDataAnalysis/hw_solutions/hw5/")
 
 Let D = department, S =sex,and A = admission status (rejected or accepted).
 
-(a) Give the marginal table S × A. Analyze the marginal table for S x A, reporting the X2 test and odds ratio. Is there any evidence of gender bias in graduate admissions?
+##(a)
+Give the marginal table S × A. Analyze the marginal table for S x A, reporting the X2 test and odds ratio. Is there any evidence of gender bias in graduate admissions?
 
 
 ```{r}
@@ -53,7 +54,8 @@ exp(confint(oddsratio(admit.gender)))
 Yes, the independence model is not valid and the odd ratio is not equal to 1 and the it's confidence interval does not include 1.
 
 
-(b) Give the partial table S×A for each level of D. Examine the S×A tables within each
+##(b)
+Give the partial table S×A for each level of D. Examine the S×A tables within each
 level of D, reporting the X2
 statistics and odds ratios. Does this contradict what you
 found in part (a)? Why or why not? What is the Cochran-Mantel-Haenszel (CMH)
@@ -78,25 +80,29 @@ print("-----------------------------------------------------------")
 
 ```
 
-Yes, for departments B, C, D, F, E  either the independence test fails or the odd ratio confidence interval contains 1.
+Yes, for departments B, C, D, F, E the $\chi^2$ values are small with p-values greater than 0.05 and the odd ratios confidence interval contains 1.
 
 ```{r}
 mantelhaen.test(UCBAdmissions, correct = F)
 ```
-Since some of the odds ratios are less than 1 and others greater than 1 the CMH test is not appropriate for this case.
+The CHM test failed to reject the null hypthesis which is odds ratio equal to 1 and , but since some of the odds ratios are less than 1 and others greater than 1 the CMH test is not appropriate for this case.
 
 
 
-(c) Drop the department ”A” from the analysis, and re-test for the conditional independence
+##(c)
+Drop the department ”A” from the analysis, and re-test for the conditional independence
 model. What is the CMH statistic now and what does it tell you about the
 relationship between admission and gender when adjusting for department?
 
 ```{r}
 mantelhaen.test(UCBAdmissions[,,2:6], correct = F)
 ```
+Sum of $\chi^2 values = `r 0.21824 + 0.80805 + 0.22159 + 0.63322 + 0.085098`, df = 8, p-value = `r 1-pchisq(1.966198,8)`$
+
 The $\chi^2$ value is small which means the independence model is a good fit when we drop department A. Also, the common odd ratio is very close to 1 and the 95% confidence interval contains 1.
 
-(d) In the Lesson 5 notes we saw that with the department A in the analysis, the model
+##(d)
+In the Lesson 5 notes we saw that with the department A in the analysis, the model
 of homogenous associations was rejected (the Breslow-Day statistic =18.83, with
 df=5, p-value=0.0021). Report the Breslow-day statistics for the analysis without
 department A. What is your conclusion now about the this model?
@@ -138,12 +144,19 @@ in files on ANGEL. The data file contains results for every other person include
 poll to reduce the size. The data are given in two formats: montana.xls, and montana.csv.
 There is also montana.sas, as well as montana.R. If you want you can read the data in any
 other format. There are some missing values which you can ignore for this analysis.
+
 Here is the coding for the data: AGE = 1 under 35, 2 35-54, 3 55 and over
+
 SEX = 0 male, 1 female
+
 INC = yearly income: 1 for under $20K, 2 for $20-35K, 3 for over $35K
+
 POL = 1 Democrat, 2 Independent, 3 Republican
+
 AREA = 1 Western, 2 Northeastern, 3 Southeastern Montana
+
 FIN = Financial status 1 worse, 2 same, 3 better than a year ago
+
 STAT = State economic outlook 0 better, 1 not better than a year ago
 
 ```{r}
@@ -152,7 +165,8 @@ montana <- read.csv("montana.csv", header = T, na.strings = ".")
 attach(montana)
 ```
 
-(a) Is there a relationship between income and party affiliation? Turn in the appropriate
+##(a)
+Is there a relationship between income and party affiliation? Turn in the appropriate
 statistic, p-value and your conclusion. Report a measure of association such as odds
 ratio(s).
 
@@ -164,9 +178,12 @@ oddsratio(inc_pol, log = F)
 exp(confint(oddsratio(inc_pol)))
 
 ```
-Independents are 2.4 times more likely to earn less than 25K compared to 
 
-(b) Is there a relationship between gender and feelings about the economic outlook?
+The chi-squared test failed to reject the independence model and the income nad political affiliation seems to be unrelated.
+The 95% confidence interval of the four odds ratios contains 1.
+
+##(b)
+Is there a relationship between gender and feelings about the economic outlook?
 Turn in the appropriate statistic, p-value and the percentage of men and of women
 that feel that the outlook “will be better”.
 
@@ -178,26 +195,87 @@ oddsratio(sex.stat, log = F)
 exp(confint(oddsratio(sex.stat)))
 
 ```
+The test of independence failed and the chi-squared test based on this 2x2 table indicates that there is relationship between gender and feelings about economic outlook. The odds ratio suggests that there's an inverse ration between the two variables.
 
-
-(c) What can you say about associations between gender, economic outlook and party
+##(c)
+What can you say about associations between gender, economic outlook and party
 affiliation? Does the model of complete (mutual) independence fit? State three
 possible conditional independence models for these three variables. Do any of these
 conditional independence model fit? Do your conclusions from (b) change in any
 way?
 
+3 conditional independence model:
+
+(sex stat, sex pol)
+
+(sex stat, stat pol)
+
+(sex pol, stat pol)
+
+test of independence across each level of political affiliacion (sex pol, stat pol)
 ```{r}
 sex.stat.pol  <- xtabs(data=montana, ~ Sex + Stat + Pol)
 sex.stat.pol
+
+
 for (i in 1:3){
     print("---------------------------------------------------")
+    print(sex.stat.pol[,,i])
     print(paste("political aff", i))
     chi.test <- chisq.test(sex.stat.pol[,,i], correct = F)
     print("expected values")
     print(chi.test$expected)
     print(chi.test)
-    print(oddsratio(sex.stat.pol[,,i], log = F))
-    print(exp(confint(oddsratio(sex.stat.pol[,,i]))))
+   # print(oddsratio(sex.stat.pol[,,i], log = F))
+    #print(exp(confint(oddsratio(sex.stat.pol[,,i]))))
+}
+```
+Sum of $\chi^2 values = `r 1.4509 + 2.786 + 0.25175`, df = 4, p-value = `r 1-pchisq(4.48865,4)`$
+
+The $\chi^2$ values are large across all levels of political affiliation with p-values greater that .05. Summig up all test statistics for each level  with 4 degress of freedom results in p-value of 0.34. The independence model fits.
+
+
+
+test of independence across each level of sex (sex stat, sex pol)
+```{r}
+sex.stat.pol  <- xtabs(data=montana, ~ Sex + Stat + Pol)
+
+
+for (i in 1:2){
+    print("---------------------------------------------------")
+    print(sex.stat.pol[i,,])
+    print(paste("sex:", i))
+    chi.test <- chisq.test(sex.stat.pol[i,,], correct = F)
+    print("expected values")
+    print(chi.test$expected)
+    print(chi.test)
 }
 ```
 
+Sum of $\chi^2 values = `r 3.117 + 3.9438`, df = 4, p-value = `r 1-pchisq(7.0608,4)`$
+
+The $\chi^2$ values are large across all levels of variable sex with p-values greater that .05. Summig up all test statistics for each level  with 4 degress of freedom results in p-value of 0.13 The independence model fits.
+
+
+
+test of independence across each level of stat (sex stat, stat pol)
+```{r}
+sex.stat.pol  <- xtabs(data=montana, ~ Sex + Stat + Pol)
+
+
+for (i in 1:2){
+    print("---------------------------------------------------")
+    print(sex.stat.pol[,i,])
+    print(paste("stat:", i))
+    chi.test <- chisq.test(sex.stat.pol[,i,], correct = F)
+    print("expected values")
+    print(chi.test$expected)
+    print(chi.test)
+}
+```
+
+Sum of $\chi^2 values = `r 1.4961 + 4.4492`, df = 4, p-value = `r 1-pchisq(5.9453,4)`$
+
+The $\chi^2$ values are large across all levels of variable Stat with p-values greater that .05. Summig up all test statistics for each level  with 4 degress of freedom results in p-value of 0.20 The independence model fits.
+
+In part b the independce test failed and we concluded that there is relationship between sex and feeling about economic status. The results in part C shows that if we control for political affiliation the sex and feelings about economic status are independent from each other.

@@ -272,9 +272,9 @@ div.tocify {
 </tbody>
 </table>
 <p>Let D = department, S =sex,and A = admission status (rejected or accepted).</p>
-<ol style="list-style-type: lower-alpha">
-<li>Give the marginal table S × A. Analyze the marginal table for S x A, reporting the X2 test and odds ratio. Is there any evidence of gender bias in graduate admissions?</li>
-</ol>
+<div id="a" class="section level2">
+<h2>(a)</h2>
+<p>Give the marginal table S × A. Analyze the marginal table for S x A, reporting the X2 test and odds ratio. Is there any evidence of gender bias in graduate admissions?</p>
 <pre class="r"><code>data(&quot;UCBAdmissions&quot;)
 admit.gender &lt;- apply(UCBAdmissions, c(1,2), sum) 
 admit.gender / sum(admit.gender)</code></pre>
@@ -296,9 +296,10 @@ admit.gender / sum(admit.gender)</code></pre>
 <pre><code>##                                  2.5 %   97.5 %
 ## Admitted:Rejected/Male:Female 1.624377 2.086693</code></pre>
 <p>Yes, the independence model is not valid and the odd ratio is not equal to 1 and the it’s confidence interval does not include 1.</p>
-<ol start="2" style="list-style-type: lower-alpha">
-<li>Give the partial table S×A for each level of D. Examine the S×A tables within each level of D, reporting the X2 statistics and odds ratios. Does this contradict what you found in part (a)? Why or why not? What is the Cochran-Mantel-Haenszel (CMH) statistic for our example? What does this statistic tell you about the relationship between admission and gender when adjusting for department?</li>
-</ol>
+</div>
+<div id="b" class="section level2">
+<h2>(b)</h2>
+<p>Give the partial table S×A for each level of D. Examine the S×A tables within each level of D, reporting the X2 statistics and odds ratios. Does this contradict what you found in part (a)? Why or why not? What is the Cochran-Mantel-Haenszel (CMH) statistic for our example? What does this statistic tell you about the relationship between admission and gender when adjusting for department?</p>
 <pre class="r"><code>data(&quot;UCBAdmissions&quot;)
 
 for (i in 1:6){
@@ -391,7 +392,7 @@ print(&quot;-----------------------------------------------------------&quot;)
 ##                                   2.5 %   97.5 %
 ## Admitted:Rejected/Male:Female 0.4552059 1.505633
 ## [1] &quot;-----------------------------------------------------------&quot;</code></pre>
-<p>Yes, for departments B, C, D, F, E either the independence test fails or the odd ratio confidence interval contains 1.</p>
+<p>Yes, for departments B, C, D, F, E the <span class="math">\(\chi^2\)</span> values are small with p-values greater than 0.05 and the odd ratios confidence interval contains 1.</p>
 <pre class="r"><code>mantelhaen.test(UCBAdmissions, correct = F)</code></pre>
 <pre><code>## 
 ##  Mantel-Haenszel chi-squared test without continuity correction
@@ -404,10 +405,11 @@ print(&quot;-----------------------------------------------------------&quot;)
 ## sample estimates:
 ## common odds ratio 
 ##         0.9046968</code></pre>
-<p>Since some of the odds ratios are less than 1 and others greater than 1 the CMH test is not appropriate for this case.</p>
-<ol start="3" style="list-style-type: lower-alpha">
-<li>Drop the department ”A” from the analysis, and re-test for the conditional independence model. What is the CMH statistic now and what does it tell you about the relationship between admission and gender when adjusting for department?</li>
-</ol>
+<p>The CHM test failed to reject the null hypthesis which is odds ratio equal to 1 and , but since some of the odds ratios are less than 1 and others greater than 1 the CMH test is not appropriate for this case.</p>
+</div>
+<div id="c" class="section level2">
+<h2>(c)</h2>
+<p>Drop the department ”A” from the analysis, and re-test for the conditional independence model. What is the CMH statistic now and what does it tell you about the relationship between admission and gender when adjusting for department?</p>
 <pre class="r"><code>mantelhaen.test(UCBAdmissions[,,2:6], correct = F)</code></pre>
 <pre><code>## 
 ##  Mantel-Haenszel chi-squared test without continuity correction
@@ -420,10 +422,12 @@ print(&quot;-----------------------------------------------------------&quot;)
 ## sample estimates:
 ## common odds ratio 
 ##           1.03103</code></pre>
+<p>Sum of <span class="math">\(\chi^2 values = 1.966198, df = 8, p-value = 0.9820306\)</span></p>
 <p>The <span class="math">\(\chi^2\)</span> value is small which means the independence model is a good fit when we drop department A. Also, the common odd ratio is very close to 1 and the 95% confidence interval contains 1.</p>
-<ol start="4" style="list-style-type: lower-alpha">
-<li>In the Lesson 5 notes we saw that with the department A in the analysis, the model of homogenous associations was rejected (the Breslow-Day statistic =18.83, with df=5, p-value=0.0021). Report the Breslow-day statistics for the analysis without department A. What is your conclusion now about the this model?</li>
-</ol>
+</div>
+<div id="d" class="section level2">
+<h2>(d)</h2>
+<p>In the Lesson 5 notes we saw that with the department A in the analysis, the model of homogenous associations was rejected (the Breslow-Day statistic =18.83, with df=5, p-value=0.0021). Report the Breslow-day statistics for the analysis without department A. What is your conclusion now about the this model?</p>
 <pre class="r"><code>BreslowDayTest(UCBAdmissions[,,2:6])</code></pre>
 <pre><code>## 
 ##  Breslow-Day test on Homogeneity of Odds Ratios
@@ -431,6 +435,7 @@ print(&quot;-----------------------------------------------------------&quot;)
 ## data:  UCBAdmissions[, , 2:6]
 ## X-squared = 2.5582, df = 4, p-value = 0.6342</code></pre>
 <p>p-value is equal to 0.64 and we do not have sufficient evidence to reject the null hypothesis which means odds ratios are approximatley identitcal when we drop the A department.</p>
+</div>
 </div>
 <div id="problem-2" class="section level1">
 <h1>Problem 2</h1>
@@ -445,13 +450,20 @@ print(&quot;-----------------------------------------------------------&quot;)
 </div>
 <div id="problem-4" class="section level1">
 <h1>Problem 4</h1>
-<p>(30 pts) Montana Economic Outlook This 1992 Montana poll asked a random sample of Montana residents whether their personal financial status was the worse, the same, or better than a year ago, and whether they thought the state economic outlook was better over the next year. Data and accompanying demographics about the respondents is provided in files on ANGEL. The data file contains results for every other person included in the poll to reduce the size. The data are given in two formats: montana.xls, and montana.csv. There is also montana.sas, as well as montana.R. If you want you can read the data in any other format. There are some missing values which you can ignore for this analysis. Here is the coding for the data: AGE = 1 under 35, 2 35-54, 3 55 and over SEX = 0 male, 1 female INC = yearly income: 1 for under $20K, 2 for $20-35K, 3 for over $35K POL = 1 Democrat, 2 Independent, 3 Republican AREA = 1 Western, 2 Northeastern, 3 Southeastern Montana FIN = Financial status 1 worse, 2 same, 3 better than a year ago STAT = State economic outlook 0 better, 1 not better than a year ago</p>
+<p>(30 pts) Montana Economic Outlook This 1992 Montana poll asked a random sample of Montana residents whether their personal financial status was the worse, the same, or better than a year ago, and whether they thought the state economic outlook was better over the next year. Data and accompanying demographics about the respondents is provided in files on ANGEL. The data file contains results for every other person included in the poll to reduce the size. The data are given in two formats: montana.xls, and montana.csv. There is also montana.sas, as well as montana.R. If you want you can read the data in any other format. There are some missing values which you can ignore for this analysis.</p>
+<p>Here is the coding for the data: AGE = 1 under 35, 2 35-54, 3 55 and over</p>
+<p>SEX = 0 male, 1 female</p>
+<p>INC = yearly income: 1 for under $20K, 2 for $20-35K, 3 for over $35K</p>
+<p>POL = 1 Democrat, 2 Independent, 3 Republican</p>
+<p>AREA = 1 Western, 2 Northeastern, 3 Southeastern Montana</p>
+<p>FIN = Financial status 1 worse, 2 same, 3 better than a year ago</p>
+<p>STAT = State economic outlook 0 better, 1 not better than a year ago</p>
 <pre class="r"><code>montana &lt;- read.csv(&quot;montana.csv&quot;, header = T, na.strings = &quot;.&quot;)
 #montana &lt;- na.omit(montana)
 attach(montana)</code></pre>
-<ol style="list-style-type: lower-alpha">
-<li>Is there a relationship between income and party affiliation? Turn in the appropriate statistic, p-value and your conclusion. Report a measure of association such as odds ratio(s).</li>
-</ol>
+<div id="a-1" class="section level2">
+<h2>(a)</h2>
+<p>Is there a relationship between income and party affiliation? Turn in the appropriate statistic, p-value and your conclusion. Report a measure of association such as odds ratio(s).</p>
 <pre class="r"><code>inc_pol &lt;- xtabs(data=montana, ~Inc+Pol)
 inc_pol </code></pre>
 <pre><code>##    Pol
@@ -478,10 +490,11 @@ inc_pol </code></pre>
 ## 2:3/1:2 0.1351381 1.008066
 ## 1:2/2:3 0.2098657 1.695945
 ## 2:3/2:3 1.0438528 7.664698</code></pre>
-<p>Independents are 2.4 times more likely to earn less than 25K compared to</p>
-<ol start="2" style="list-style-type: lower-alpha">
-<li>Is there a relationship between gender and feelings about the economic outlook? Turn in the appropriate statistic, p-value and the percentage of men and of women that feel that the outlook “will be better”.</li>
-</ol>
+<p>The chi-squared test failed to reject the independence model and the income nad political affiliation seems to be unrelated. The 95% confidence interval of the four odds ratios contains 1.</p>
+</div>
+<div id="b-1" class="section level2">
+<h2>(b)</h2>
+<p>Is there a relationship between gender and feelings about the economic outlook? Turn in the appropriate statistic, p-value and the percentage of men and of women that feel that the outlook “will be better”.</p>
 <pre class="r"><code>sex.stat &lt;- xtabs(data=montana, ~Sex+Stat)
 sex.stat</code></pre>
 <pre><code>##    Stat
@@ -501,9 +514,16 @@ sex.stat</code></pre>
 <pre class="r"><code>exp(confint(oddsratio(sex.stat)))</code></pre>
 <pre><code>##             2.5 %    97.5 %
 ## 0:1/0:1 0.2758911 0.9751994</code></pre>
-<ol start="3" style="list-style-type: lower-alpha">
-<li>What can you say about associations between gender, economic outlook and party affiliation? Does the model of complete (mutual) independence fit? State three possible conditional independence models for these three variables. Do any of these conditional independence model fit? Do your conclusions from (b) change in any way?</li>
-</ol>
+<p>The test of independence failed and the chi-squared test based on this 2x2 table indicates that there is relationship between gender and feelings about economic outlook. The odds ratio suggests that there’s an inverse ration between the two variables.</p>
+</div>
+<div id="c-1" class="section level2">
+<h2>(c)</h2>
+<p>What can you say about associations between gender, economic outlook and party affiliation? Does the model of complete (mutual) independence fit? State three possible conditional independence models for these three variables. Do any of these conditional independence model fit? Do your conclusions from (b) change in any way?</p>
+<p>3 conditional independence model:</p>
+<p>(sex stat, sex pol)</p>
+<p>(sex stat, stat pol)</p>
+<p>(sex pol, stat pol)</p>
+<p>test of independence across each level of political affiliacion (sex pol, stat pol)</p>
 <pre class="r"><code>sex.stat.pol  &lt;- xtabs(data=montana, ~ Sex + Stat + Pol)
 sex.stat.pol</code></pre>
 <pre><code>## , , Pol = 1
@@ -528,15 +548,20 @@ sex.stat.pol</code></pre>
 ##   1 16  9</code></pre>
 <pre class="r"><code>for (i in 1:3){
     print(&quot;---------------------------------------------------&quot;)
+    print(sex.stat.pol[,,i])
     print(paste(&quot;political aff&quot;, i))
     chi.test &lt;- chisq.test(sex.stat.pol[,,i], correct = F)
     print(&quot;expected values&quot;)
     print(chi.test$expected)
     print(chi.test)
-    print(oddsratio(sex.stat.pol[,,i], log = F))
-    print(exp(confint(oddsratio(sex.stat.pol[,,i]))))
+   # print(oddsratio(sex.stat.pol[,,i], log = F))
+    #print(exp(confint(oddsratio(sex.stat.pol[,,i]))))
 }</code></pre>
 <pre><code>## [1] &quot;---------------------------------------------------&quot;
+##    Stat
+## Sex  0  1
+##   0 21 12
+##   1 27 12
 ## [1] &quot;political aff 1&quot;
 ## [1] &quot;expected values&quot;
 ##    Stat
@@ -549,12 +574,11 @@ sex.stat.pol</code></pre>
 ## data:  sex.stat.pol[, , i]
 ## X-squared = 0.25175, df = 1, p-value = 0.6158
 ## 
-##  odds ratios for Sex and Stat 
-## 
-## [1] 0.7777778
-##             2.5 %  97.5 %
-## 0:1/0:1 0.2911591 2.07769
 ## [1] &quot;---------------------------------------------------&quot;
+##    Stat
+## Sex  0 1
+##   0 16 7
+##   1 13 1
 ## [1] &quot;political aff 2&quot;</code></pre>
 <pre><code>## Warning in chisq.test(sex.stat.pol[, , i], correct = F): Chi-squared
 ## approximation may be incorrect</code></pre>
@@ -569,12 +593,11 @@ sex.stat.pol</code></pre>
 ## data:  sex.stat.pol[, , i]
 ## X-squared = 2.786, df = 1, p-value = 0.09509
 ## 
-##  odds ratios for Sex and Stat 
-## 
-## [1] 0.1758242
-##              2.5 %   97.5 %
-## 0:1/0:1 0.01910718 1.617933
 ## [1] &quot;---------------------------------------------------&quot;
+##    Stat
+## Sex  0  1
+##   0 20 21
+##   1 16  9
 ## [1] &quot;political aff 3&quot;
 ## [1] &quot;expected values&quot;
 ##    Stat
@@ -585,13 +608,111 @@ sex.stat.pol</code></pre>
 ##  Pearson's Chi-squared test
 ## 
 ## data:  sex.stat.pol[, , i]
-## X-squared = 1.4509, df = 1, p-value = 0.2284
+## X-squared = 1.4509, df = 1, p-value = 0.2284</code></pre>
+<p>Sum of <span class="math">\(\chi^2 values = 4.48865, df = 4, p-value = 0.3438954\)</span></p>
+<p>The <span class="math">\(\chi^2\)</span> values are large across all levels of political affiliation with p-values greater that .05. Summig up all test statistics for each level with 4 degress of freedom results in p-value of 0.34. The independence model fits.</p>
+<p>test of independence across each level of sex (sex stat, sex pol)</p>
+<pre class="r"><code>sex.stat.pol  &lt;- xtabs(data=montana, ~ Sex + Stat + Pol)
+
+
+for (i in 1:2){
+    print(&quot;---------------------------------------------------&quot;)
+    print(sex.stat.pol[i,,])
+    print(paste(&quot;sex:&quot;, i))
+    chi.test &lt;- chisq.test(sex.stat.pol[i,,], correct = F)
+    print(&quot;expected values&quot;)
+    print(chi.test$expected)
+    print(chi.test)
+}</code></pre>
+<pre><code>## [1] &quot;---------------------------------------------------&quot;
+##     Pol
+## Stat  1  2  3
+##    0 21 16 20
+##    1 12  7 21
+## [1] &quot;sex: 1&quot;
+## [1] &quot;expected values&quot;
+##     Pol
+## Stat        1         2        3
+##    0 19.39175 13.515464 24.09278
+##    1 13.60825  9.484536 16.90722
 ## 
-##  odds ratios for Sex and Stat 
+##  Pearson's Chi-squared test
 ## 
-## [1] 0.5357143
-##             2.5 %   97.5 %
-## 0:1/0:1 0.1930321 1.486747</code></pre>
+## data:  sex.stat.pol[i, , ]
+## X-squared = 3.117, df = 2, p-value = 0.2104
+## 
+## [1] &quot;---------------------------------------------------&quot;
+##     Pol
+## Stat  1  2  3
+##    0 27 13 16
+##    1 12  1  9
+## [1] &quot;sex: 2&quot;</code></pre>
+<pre><code>## Warning in chisq.test(sex.stat.pol[i, , ], correct = F): Chi-squared
+## approximation may be incorrect</code></pre>
+<pre><code>## [1] &quot;expected values&quot;
+##     Pol
+## Stat  1         2         3
+##    0 28 10.051282 17.948718
+##    1 11  3.948718  7.051282
+## 
+##  Pearson's Chi-squared test
+## 
+## data:  sex.stat.pol[i, , ]
+## X-squared = 3.9438, df = 2, p-value = 0.1392</code></pre>
+<p>Sum of <span class="math">\(\chi^2 values = 7.0608, df = 4, p-value = 0.1327099\)</span></p>
+<p>The <span class="math">\(\chi^2\)</span> values are large across all levels of variable sex with p-values greater that .05. Summig up all test statistics for each level with 4 degress of freedom results in p-value of 0.13 The independence model fits.</p>
+<p>test of independence across each level of stat (sex stat, stat pol)</p>
+<pre class="r"><code>sex.stat.pol  &lt;- xtabs(data=montana, ~ Sex + Stat + Pol)
+
+
+for (i in 1:2){
+    print(&quot;---------------------------------------------------&quot;)
+    print(sex.stat.pol[,i,])
+    print(paste(&quot;stat:&quot;, i))
+    chi.test &lt;- chisq.test(sex.stat.pol[,i,], correct = F)
+    print(&quot;expected values&quot;)
+    print(chi.test$expected)
+    print(chi.test)
+}</code></pre>
+<pre><code>## [1] &quot;---------------------------------------------------&quot;
+##    Pol
+## Sex  1  2  3
+##   0 21 16 20
+##   1 27 13 16
+## [1] &quot;stat: 1&quot;
+## [1] &quot;expected values&quot;
+##    Pol
+## Sex        1        2        3
+##   0 24.21239 14.62832 18.15929
+##   1 23.78761 14.37168 17.84071
+## 
+##  Pearson's Chi-squared test
+## 
+## data:  sex.stat.pol[, i, ]
+## X-squared = 1.4961, df = 2, p-value = 0.4733
+## 
+## [1] &quot;---------------------------------------------------&quot;
+##    Pol
+## Sex  1 2  3
+##   0 12 7 21
+##   1 12 1  9
+## [1] &quot;stat: 2&quot;</code></pre>
+<pre><code>## Warning in chisq.test(sex.stat.pol[, i, ], correct = F): Chi-squared
+## approximation may be incorrect</code></pre>
+<pre><code>## [1] &quot;expected values&quot;
+##    Pol
+## Sex         1       2        3
+##   0 15.483871 5.16129 19.35484
+##   1  8.516129 2.83871 10.64516
+## 
+##  Pearson's Chi-squared test
+## 
+## data:  sex.stat.pol[, i, ]
+## X-squared = 4.4492, df = 2, p-value = 0.1081</code></pre>
+<p>Sum of <span class="math">\(\chi^2 values = 5.9453, df = 4, p-value = 0.2032707\)</span></p>
+<p>The <span class="math">\(\chi^2\)</span> values are large across all levels of variable Stat with p-values greater that .05. Summig up all test statistics for each level with 4 degress of freedom results in p-value of 0.20 The independence model fits.</p>
+<p>In part b the independce test failed and we concluded that there is relationship between sex and feeling about economic status. The results in part C shows that if we control for political affiliation the sex and feelings about economic status are independent from each other.</p>
+</div>
 </div>
 
 
