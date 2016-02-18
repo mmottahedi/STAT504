@@ -85,7 +85,7 @@ Yes, for departments B, C, D, F, E the $\chi^2$ values are small with p-values g
 ```{r}
 mantelhaen.test(UCBAdmissions, correct = F)
 ```
-The CHM test failed to reject the null hypthesis which is odds ratio equal to 1 and , but since some of the odds ratios are less than 1 and others greater than 1 the CMH test is not appropriate for this case.
+The CHM test failed to reject the null hypothesis which is odds ratio equal to 1 and , but since some of the odds ratios are less than 1 and others greater than 1 the CMH test is not appropriate for this case.
 
 
 
@@ -103,7 +103,7 @@ The $\chi^2$ value is small which means the independence model is a good fit whe
 
 ##(d)
 In the Lesson 5 notes we saw that with the department A in the analysis, the model
-of homogenous associations was rejected (the Breslow-Day statistic =18.83, with
+of homogeneous associations was rejected (the Breslow-Day statistic =18.83, with
 df=5, p-value=0.0021). Report the Breslow-day statistics for the analysis without
 department A. What is your conclusion now about the this model?
 
@@ -111,15 +111,15 @@ department A. What is your conclusion now about the this model?
 BreslowDayTest(UCBAdmissions[,,2:6])
 ```
 
-p-value is equal to 0.64 and we do not have sufficient evidence to reject the null hypothesis which means odds ratios are approximatley identitcal when we drop the A department.
+p-value is equal to 0.64 and we do not have sufficient evidence to reject the null hypothesis which means odds ratios are approximately identical when we drop the A department.
 
 #Problem 2
 
 (15 pts) For three-way contingency tables, when any pair of variables is conditionally independent,
-explain why there is homogenous association. When there is no homogeneous
+explain why there is homogeneous association. When there is no homogeneous
 association, explain why no pair of variables can be conditionally independent.
 
-Conditinal independence is a special case of homogenous independece. Conditional requires that the odds ratios across the third variable to be equal to 1. The homogenous association only requires that the odds ratios to be equal to each other but to neccesarily equal to 1. When we have coditional independence, it means that the odds ratios are equal to each other and the homogenous independence is satisfied. When there is no homogenous independence it means that it means at least one of the odds ratios is not equal to 1.
+Conditional independence is a special case of homogeneous independence. Conditional requires that the odds ratios across the third variable to be equal to 1. The homogeneous association only requires that the odds ratios to be equal to each other but to necessarily equal to 1. When we have conditional independence, it means that the odds ratios are equal to each other and the homogeneous independence is satisfied. When there is no homogeneous independence it means that it means at least one of the odds ratios is not equal to 1.
 
 
 #Problem 3
@@ -141,8 +141,8 @@ Montana residents whether their personal financial status was the worse, the sam
 than a year ago, and whether they thought the state economic outlook was better over
 the next year. Data and accompanying demographics about the respondents is provided
 in files on ANGEL. The data file contains results for every other person included in the
-poll to reduce the size. The data are given in two formats: montana.xls, and montana.csv.
-There is also montana.sas, as well as montana.R. If you want you can read the data in any
+poll to reduce the size. The data are given in two formats: Montana.xls, and Montana.csv.
+There is also Montana.sas, as well as Montana.R. If you want you can read the data in any
 other format. There are some missing values which you can ignore for this analysis.
 
 Here is the coding for the data: AGE = 1 under 35, 2 35-54, 3 55 and over
@@ -179,7 +179,7 @@ exp(confint(oddsratio(inc_pol)))
 
 ```
 
-The chi-squared test failed to reject the independence model and the income nad political affiliation seems to be unrelated.
+The chi-squared test failed to reject the independence model and the income and political affiliation seems to be unrelated.
 The 95% confidence interval of the four odds ratios contains 1.
 
 ##(b)
@@ -212,7 +212,7 @@ way?
 
 (sex pol, stat pol)
 
-test of independence across each level of political affiliacion (sex pol, stat pol)
+test of independence across each level of political affiliation (sex pol, stat pol)
 ```{r}
 sex.stat.pol  <- xtabs(data=montana, ~ Sex + Stat + Pol)
 sex.stat.pol
@@ -232,7 +232,7 @@ for (i in 1:3){
 ```
 Sum of $\chi^2 values = `r 1.4509 + 2.786 + 0.25175`, df = 4, p-value = `r 1-pchisq(4.48865,4)`$
 
-The $\chi^2$ values are large across all levels of political affiliation with p-values greater that .05. Summig up all test statistics for each level  with 4 degress of freedom results in p-value of 0.34. The independence model fits.
+The $\chi^2$ values are large across all levels of political affiliation with p-values greater that .05. Summing up all test statistics for each level  with 4 degrees of freedom results in p-value of 0.34. The independence model fits.
 
 
 
@@ -254,7 +254,7 @@ for (i in 1:2){
 
 Sum of $\chi^2 values = `r 3.117 + 3.9438`, df = 4, p-value = `r 1-pchisq(7.0608,4)`$
 
-The $\chi^2$ values are large across all levels of variable sex with p-values greater that .05. Summig up all test statistics for each level  with 4 degress of freedom results in p-value of 0.13 The independence model fits.
+The $\chi^2$ values are large across all levels of variable sex with p-values greater that .05. Summing up all test statistics for each level  with 4 degrees of freedom results in p-value of 0.13 The independence model fits.
 
 
 
@@ -276,6 +276,6 @@ for (i in 1:2){
 
 Sum of $\chi^2 values = `r 1.4961 + 4.4492`, df = 4, p-value = `r 1-pchisq(5.9453,4)`$
 
-The $\chi^2$ values are large across all levels of variable Stat with p-values greater that .05. Summig up all test statistics for each level  with 4 degress of freedom results in p-value of 0.20 The independence model fits.
+The $\chi^2$ values are large across all levels of variable Stat with p-values greater that .05. Summing up all test statistics for each level  with 4 degrees of freedom results in p-value of 0.20 The independence model fits.
 
-In part b the independce test failed and we concluded that there is relationship between sex and feeling about economic status. The results in part C shows that if we control for political affiliation the sex and feelings about economic status are independent from each other.
+In part b the independence test failed and we concluded that there is relationship between sex and feeling about economic status. The results in part C shows that if we control for political affiliation the sex and feelings about economic status are independent from each other.

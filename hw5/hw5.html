@@ -405,7 +405,7 @@ print(&quot;-----------------------------------------------------------&quot;)
 ## sample estimates:
 ## common odds ratio 
 ##         0.9046968</code></pre>
-<p>The CHM test failed to reject the null hypthesis which is odds ratio equal to 1 and , but since some of the odds ratios are less than 1 and others greater than 1 the CMH test is not appropriate for this case.</p>
+<p>The CHM test failed to reject the null hypothesis which is odds ratio equal to 1 and , but since some of the odds ratios are less than 1 and others greater than 1 the CMH test is not appropriate for this case.</p>
 </div>
 <div id="c" class="section level2">
 <h2>(c)</h2>
@@ -427,20 +427,20 @@ print(&quot;-----------------------------------------------------------&quot;)
 </div>
 <div id="d" class="section level2">
 <h2>(d)</h2>
-<p>In the Lesson 5 notes we saw that with the department A in the analysis, the model of homogenous associations was rejected (the Breslow-Day statistic =18.83, with df=5, p-value=0.0021). Report the Breslow-day statistics for the analysis without department A. What is your conclusion now about the this model?</p>
+<p>In the Lesson 5 notes we saw that with the department A in the analysis, the model of homogeneous associations was rejected (the Breslow-Day statistic =18.83, with df=5, p-value=0.0021). Report the Breslow-day statistics for the analysis without department A. What is your conclusion now about the this model?</p>
 <pre class="r"><code>BreslowDayTest(UCBAdmissions[,,2:6])</code></pre>
 <pre><code>## 
 ##  Breslow-Day test on Homogeneity of Odds Ratios
 ## 
 ## data:  UCBAdmissions[, , 2:6]
 ## X-squared = 2.5582, df = 4, p-value = 0.6342</code></pre>
-<p>p-value is equal to 0.64 and we do not have sufficient evidence to reject the null hypothesis which means odds ratios are approximatley identitcal when we drop the A department.</p>
+<p>p-value is equal to 0.64 and we do not have sufficient evidence to reject the null hypothesis which means odds ratios are approximately identical when we drop the A department.</p>
 </div>
 </div>
 <div id="problem-2" class="section level1">
 <h1>Problem 2</h1>
-<p>(15 pts) For three-way contingency tables, when any pair of variables is conditionally independent, explain why there is homogenous association. When there is no homogeneous association, explain why no pair of variables can be conditionally independent.</p>
-<p>Conditinal independence is a special case of homogenous independece. Conditional requires that the odds ratios across the third variable to be equal to 1. The homogenous association only requires that the odds ratios to be equal to each other but to neccesarily equal to 1. When we have coditional independence, it means that the odds ratios are equal to each other and the homogenous independence is satisfied. When there is no homogenous independence it means that it means at least one of the odds ratios is not equal to 1.</p>
+<p>(15 pts) For three-way contingency tables, when any pair of variables is conditionally independent, explain why there is homogeneous association. When there is no homogeneous association, explain why no pair of variables can be conditionally independent.</p>
+<p>Conditional independence is a special case of homogeneous independence. Conditional requires that the odds ratios across the third variable to be equal to 1. The homogeneous association only requires that the odds ratios to be equal to each other but to necessarily equal to 1. When we have conditional independence, it means that the odds ratios are equal to each other and the homogeneous independence is satisfied. When there is no homogeneous independence it means that it means at least one of the odds ratios is not equal to 1.</p>
 </div>
 <div id="problem-3" class="section level1">
 <h1>Problem 3</h1>
@@ -450,7 +450,7 @@ print(&quot;-----------------------------------------------------------&quot;)
 </div>
 <div id="problem-4" class="section level1">
 <h1>Problem 4</h1>
-<p>(30 pts) Montana Economic Outlook This 1992 Montana poll asked a random sample of Montana residents whether their personal financial status was the worse, the same, or better than a year ago, and whether they thought the state economic outlook was better over the next year. Data and accompanying demographics about the respondents is provided in files on ANGEL. The data file contains results for every other person included in the poll to reduce the size. The data are given in two formats: montana.xls, and montana.csv. There is also montana.sas, as well as montana.R. If you want you can read the data in any other format. There are some missing values which you can ignore for this analysis.</p>
+<p>(30 pts) Montana Economic Outlook This 1992 Montana poll asked a random sample of Montana residents whether their personal financial status was the worse, the same, or better than a year ago, and whether they thought the state economic outlook was better over the next year. Data and accompanying demographics about the respondents is provided in files on ANGEL. The data file contains results for every other person included in the poll to reduce the size. The data are given in two formats: Montana.xls, and Montana.csv. There is also Montana.sas, as well as Montana.R. If you want you can read the data in any other format. There are some missing values which you can ignore for this analysis.</p>
 <p>Here is the coding for the data: AGE = 1 under 35, 2 35-54, 3 55 and over</p>
 <p>SEX = 0 male, 1 female</p>
 <p>INC = yearly income: 1 for under $20K, 2 for $20-35K, 3 for over $35K</p>
@@ -490,7 +490,7 @@ inc_pol </code></pre>
 ## 2:3/1:2 0.1351381 1.008066
 ## 1:2/2:3 0.2098657 1.695945
 ## 2:3/2:3 1.0438528 7.664698</code></pre>
-<p>The chi-squared test failed to reject the independence model and the income nad political affiliation seems to be unrelated. The 95% confidence interval of the four odds ratios contains 1.</p>
+<p>The chi-squared test failed to reject the independence model and the income and political affiliation seems to be unrelated. The 95% confidence interval of the four odds ratios contains 1.</p>
 </div>
 <div id="b-1" class="section level2">
 <h2>(b)</h2>
@@ -523,7 +523,7 @@ sex.stat</code></pre>
 <p>(sex stat, sex pol)</p>
 <p>(sex stat, stat pol)</p>
 <p>(sex pol, stat pol)</p>
-<p>test of independence across each level of political affiliacion (sex pol, stat pol)</p>
+<p>test of independence across each level of political affiliation (sex pol, stat pol)</p>
 <pre class="r"><code>sex.stat.pol  &lt;- xtabs(data=montana, ~ Sex + Stat + Pol)
 sex.stat.pol</code></pre>
 <pre><code>## , , Pol = 1
@@ -610,7 +610,7 @@ sex.stat.pol</code></pre>
 ## data:  sex.stat.pol[, , i]
 ## X-squared = 1.4509, df = 1, p-value = 0.2284</code></pre>
 <p>Sum of <span class="math">\(\chi^2 values = 4.48865, df = 4, p-value = 0.3438954\)</span></p>
-<p>The <span class="math">\(\chi^2\)</span> values are large across all levels of political affiliation with p-values greater that .05. Summig up all test statistics for each level with 4 degress of freedom results in p-value of 0.34. The independence model fits.</p>
+<p>The <span class="math">\(\chi^2\)</span> values are large across all levels of political affiliation with p-values greater that .05. Summing up all test statistics for each level with 4 degrees of freedom results in p-value of 0.34. The independence model fits.</p>
 <p>test of independence across each level of sex (sex stat, sex pol)</p>
 <pre class="r"><code>sex.stat.pol  &lt;- xtabs(data=montana, ~ Sex + Stat + Pol)
 
@@ -660,7 +660,7 @@ for (i in 1:2){
 ## data:  sex.stat.pol[i, , ]
 ## X-squared = 3.9438, df = 2, p-value = 0.1392</code></pre>
 <p>Sum of <span class="math">\(\chi^2 values = 7.0608, df = 4, p-value = 0.1327099\)</span></p>
-<p>The <span class="math">\(\chi^2\)</span> values are large across all levels of variable sex with p-values greater that .05. Summig up all test statistics for each level with 4 degress of freedom results in p-value of 0.13 The independence model fits.</p>
+<p>The <span class="math">\(\chi^2\)</span> values are large across all levels of variable sex with p-values greater that .05. Summing up all test statistics for each level with 4 degrees of freedom results in p-value of 0.13 The independence model fits.</p>
 <p>test of independence across each level of stat (sex stat, stat pol)</p>
 <pre class="r"><code>sex.stat.pol  &lt;- xtabs(data=montana, ~ Sex + Stat + Pol)
 
@@ -710,8 +710,8 @@ for (i in 1:2){
 ## data:  sex.stat.pol[, i, ]
 ## X-squared = 4.4492, df = 2, p-value = 0.1081</code></pre>
 <p>Sum of <span class="math">\(\chi^2 values = 5.9453, df = 4, p-value = 0.2032707\)</span></p>
-<p>The <span class="math">\(\chi^2\)</span> values are large across all levels of variable Stat with p-values greater that .05. Summig up all test statistics for each level with 4 degress of freedom results in p-value of 0.20 The independence model fits.</p>
-<p>In part b the independce test failed and we concluded that there is relationship between sex and feeling about economic status. The results in part C shows that if we control for political affiliation the sex and feelings about economic status are independent from each other.</p>
+<p>The <span class="math">\(\chi^2\)</span> values are large across all levels of variable Stat with p-values greater that .05. Summing up all test statistics for each level with 4 degrees of freedom results in p-value of 0.20 The independence model fits.</p>
+<p>In part b the independence test failed and we concluded that there is relationship between sex and feeling about economic status. The results in part C shows that if we control for political affiliation the sex and feelings about economic status are independent from each other.</p>
 </div>
 </div>
 
