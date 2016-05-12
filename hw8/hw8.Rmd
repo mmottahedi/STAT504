@@ -1,0 +1,162 @@
+---
+title: "Hw8"
+author: "Mohammad Mottahedi"
+date: "March 20, 2016"
+output: pdf_document
+---
+```{r}
+set.seed(1234)
+setwd('~/Dropbox/spring2016/discretDataAnalysis/hw_solutions/hw8/')
+library(VGAM)
+library(MASS)
+
+```
+
+
+# Problem 1
+
+\subsection{part a}
+    
+```{r}
+gator = read.table("gator.txt",header=T)
+gator$Size = factor(gator$Size,levels=levels(gator$Size)[2:1])
+totaln=sum(gator[1:16,5:9]) ## total sample size
+rown=c(1:16)
+for (i in 1:16) {
+rown[i]=sum(gator[i,5:9]) 
+rown
+}
+
+##sets Hancock as the baseline level
+contrasts(gator$Lake)=contr.treatment(levels(gator$Lake),base=2)
+#contrasts(gator$Lake)
+
+##sets "small" as the refernce level
+contrasts(gator$Size)=contr.treatment(levels(gator$Size),base=2)
+#contrasts(gator$Size)
+
+
+##sets male as the reference level
+contrasts(gator$Gender)=contr.treatment(levels(gator$Gender),base=2)
+#contrasts(gator$Gender)
+
+fit = vglm(cbind(Bird,Invertebrate,Reptile,Other,Fish)~Lake+Size, data=gator, family=multinomial)
+summary(fit)
+
+```
+The overal fit of the model can be evaluiated using residual deviance $52.4$ with $44$ degrees of freedom (p-value: $`r 1-pchisq(52.4,44)`$). Overal the fit of the model is not good.
+
+model equations:
+
+$log \frac{\pi_{food,lsg}}{\pi_{F,lsg}} = \alpha_{food} + \beta_{food,l}^{lake} + \beta_{food,s}^{size}$
+
+
+$log \frac{\pi_{bird,lsg}}{\pi_{F,lsg}} = -2.03 -1.35 Oklawaha + 0.39 Trafford - 0.695 George + 0.6307 Large$
+
+$log \frac{\pi_{Invertebrate,lsg}}{\pi_{F,lsg}} = -1.7492 +2.5956 Oklawaha + 2.7803 Trafford - 0.695 George -1.4582 Large$
+
+$log \frac{\pi_{Invertebrate,lsg}}{\pi_{F,lsg}} = -2.4230 +1.2161 Oklawaha + 1.6925 Trafford - 1.2428 George +0.3513 Large$
+
+$log \frac{\pi_{Invertebrate,lsg}}{\pi_{F,lsg}} = -0.7465 -0.8205 Oklawaha + 0.6902 Trafford - 0.8262 George -0.3316 Large$
+    
+    
+\subsection{part b}
+    
+```{r}
+denom = 1 + exp(-2.03 - 1.35  + 0.6307 ) + 
+    exp(-1.7492 + 2.5956 - 1.4582 ) + 
+    exp(-2.4230 + 1.2161 + 0.3513 ) + 
+    exp(-0.7465 - 0.8205 - 0.3316 )
+```
+$P(fish|Large,...) = `r 1/denom`$
+
+```{r}
+denom = 1 + exp(-2.03 - 1.35) + 
+    exp(-1.7492 + 2.5956) + 
+    exp(-2.4230 + 1.2161) + 
+    exp(-0.7465 - 0.8205)
+
+```
+$P(fish|small,...) = `r 1/denom`$
+
+probability of fish being the main food source is 1.7 times (46%) for large aligators compared to small aligators (0.26)
+
+\subsection{part c}
+    
+```{r}
+gator = read.table("alligator.dat",col.names = c('lake', 'sex', 'size', 'food','count'))
+#gator$size = factor(gator$size,levels=c("small", "large"))
+gator$food = factor(gator$food, levels = c('fish', 'invertebrate', 'reptile', 'bird', 'other'))
+result = polr( food ~ size + lake, weights=count, data=gator)
+null_model = polr( food ~ 1, weights=count, data=gator)
+sat_model = polr(food ~ size + lake + sex + size:lake + size:sex + sex:lake, weights=count, data=gator )
+
+summary(result)
+
+# comparing with null model 
+anova(result, null_model)
+
+# comparing with sat model
+anova(result, sat_model)
+
+ pchisq(deviance(result), df.residual(result), lower.tail = F)
+```    
+The model is significant compared to both null and saturated model which shows that this model at leat has one non-zero coefficeint. The p-value for the current model is close to zero so the model is a good fit.
+
+The effect of size is oposite of what we found in part b. the probability of eating fish is greater for smaller aligators.
+
+
+# Problem 2
+    
+__part a__
+
+We have to fit $r-1$ equation which is equal to $3$.
+The $3$ parameter coefficients are the same and the 3 interceprt are different.
+
+__part b__
+
+$x_1:$ decrease
+
+$x_2:$ increase
+
+$x_3:$ increase
+
+__part c__
+
+$x_1:$ much less
+
+$x_2:$ not at all true
+
+$x_3:$ strongly disagree
+
+
+# Problem 3
+
+
+$logit[P(Y \le j|x_1)] - logit[P(Y \le j|x_2)]$
+
+$= log \frac{P(Y \le j|x_1) / P(Y > j|x_1)}{P(Y \le j|x_2) / P(Y > j|x_2)}$
+
+$log[(1- \alpha - \beta x_2) (\alpha + \beta x_1) - (1 - \alpha - \beta x_1)(\alpha +\beta x_2)]$
+
+$=\beta(x_1-x_2)$
+
+if $x_1 - x_2=1$
+
+$=\beta$
+
+
+\subsection{part b}
+
+from part a:
+
+$log \frac{P(Y \le j|x_1) / P(Y > j|x_1)}{P(Y \le j|x_2) / P(Y > j|x_2)} = \beta(x_1-x2)$
+
+the odds of being below $\le j$  at $x_1$ is $e^{\beta (x_1-x_2)}$ times the odds at $x_2$. 
+
+for x=1,2 and j=1,2
+
+|    | j1  |  j2 | 
+|----- |-----|-----|
+|x1  | p(y <= 1 / x1) | p(y >= 2 / x1)|
+|x2  | p(y <= 1 / x2) | p(y >= 2 / x2)|

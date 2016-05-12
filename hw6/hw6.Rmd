@@ -1,0 +1,286 @@
+---
+title: "hw6"
+author: "Mohammad Mottahedi"
+date: "February 21, 2016"
+output: 
+    pdf_document:
+    toc: true
+---
+
+# Problem 1
+ 9pts Consider the saturated model for a 2 by 2 table under multinomial sampling. There
+are two variables, X and Y , each taking values 0 or 1. The saturated model has three
+degrees of freedom. Inside it is the independence model with its two degees of freedom.
+Suppose we represent these degrees of freedom using three parameters: $\alpha$, the log odds
+that Y = 1 ignoring X, $\gamma$, the log odds that X = 1 ignoring $\gamma$ , and $\delta$, the log odds ratio.
+
+## (a)
+Explain how any independence model (a multinomial distribution (p11, p12, p21, p22)
+such that p11p22/p12p21= 1) can be represented by some choice of $\alpha, \gamma$ but fixing $\delta=0$ 
+
+
+$\alpha = log(p_{+1} / (1-p_{+1}))$ 
+
+$p_{+1}= e^{\alpha} / (1+ e^{\alpha})$
+
+$p_{+2}= 1/ (1+ e^{\alpha})$
+
+$\gamma= log(p_{1+} / (1-p_{1+}))$
+
+$p_{1+}= e^{\gamma} / (1+ e^{\gamma})$
+
+
+$p_{2+} = 1/ (1+ e^{\gamma})$
+
+$p11 = e^{\alpha} / (1+ e^{\alpha}) x e^{\gamma} / (1+ e^{\gamma})$
+
+$p12 = 1/ (1+ e^{\gamma})  x e^{\gamma} / (1+ e^{\gamma})$
+
+$p21 = 1/ (1+ e^{\gamma})  x e^{\alpha} / (1+ e^{\alpha})$
+
+$p22 = 1/ (1+ e^{\gamma})  x 1/ (1+ e^{\alpha})$
+
+$p_{11} p_{22} / p_{12} p_{21}$
+
+
+The two parts in above equation represent the conditional probabilities in each cell in a 2 by 2 table under multinomial sampling. 
+
+## (b)
+Show that any multinomial distribution (p11, p12, p21, p22) can be represented by
+some choice of $\alpha, \gamma, \delta$ (now $\delta$ must be allowed to be nonzero).
+
+saturated model:
+$log(\mu_{ij}) = \lambda_i^{\alpha} + \lambda_j^{\gamma} + \lambda_j^{\delta}$
+
+independece model:
+$log(\mu_{ij}) = \lambda_i^{\alpha} + \lambda_j^{\gamma}$
+
+## (c)
+Explain how to get the functional form of logistic regression for Y predicted by X
+from this set-up (hint: compute P r(Y = 1|X = 1) as a function of $\alpha, \gamma, \delta$). Which
+of our parameters $\alpha, \gamma, \delta$ correspond to the $\beta_0$ and $\beta_1$ in binary logistic regression
+with a single categorical predictor?
+
+$\alpha = \beta_0$, $\delta=\beta_1$
+
+$log(\pi / (1-\pi))= \beta_0 + beta_1 X$
+
+$Pr(Y=1| X=0) = \beta_0$
+
+$Pr(Y=1| X=0) = 1/(1+ e^{\gamma})  x  e^{\alpha}/ (1+e^{\alpha})  /  1/(1+ e^{\gamma})$
+
+$Pr(Y=1| X=0) = e^{\alpha}/ (1+e^{\alpha})$  ---> $\alpha = \beta_0$
+
+$Pr(Y=1| X=1) = \beta_0 + \beta_1 = \alpha + \beta_1$
+
+$OddRatio = \frac{p11*p22}{p21*p12} = P(Y=1|X=1) / P(Y=0|X=1)] * [P(Y=0|X=0)] / P(Y=1|X=0)]$
+
+$Pr(Y=1| X=0) - e^{\alpha + \beta_1} / (1 + e^{\alpha + \beta_1})$
+
+$Pr(Y=0| X=1) - 1/ (1 + e^{\alpha + \beta_1})$
+
+$Pr(Y=1| X=0) - e^{\alpha} / (1 + e^{\alpha})$
+
+$Pr(Y=0| X=0) / Pr(Y=1| X=0) = e^{- \alpha}$   ---> $OddsRatio = e^{\alpha + \beta_1} * e^{- \alpha} = e^{\beta_1}$
+
+$p(x) = e^{\alpha + \delta x} / (1 + e^{\alpha + \delta x}),  \beta_0 = \alpha , \beta_1 = \delta$ 
+
+# Problem 2
+9pts Let Y1, Y2, ..., YN be independent random variables. For each of the following models,
+state whether it is or is not a generalized linear model. If it is a GLM, then what is
+the link function and the systematic component. If it is not a GLM, explain why is it not
+a GLM. The basic intro to GLMs was given in Lesson 5.
+
+ \textcolor{red}{check part a}
+
+## (a)
+No, the link function is not linear because of the log term.
+
+
+## (b)
+No, the relationship between transformed response and independent variables are not linear.  $log(Y_i) = \alpha + log(\beta_1)x_{1i} + \beta_2 log(x_{2i})$
+
+## (c)
+No, the systematic component are not linear in independent variables. $log \frac{\pi_i}{1-\pi_i} = \alpha + \beta e^{x_i}$
+
+
+# Problem 3
+Children of ages 0-15 were classified according to whether they carried Streptococcus
+pyogenes and according to the size of their tonsils; see homework 4.
+Let $\pi_i$ be the probability of a child being a carrier of Streptococcus and Xi
+tonsil size.
+
+## (a) 
+Fit the logistic regression model. Write the model in terms of $\pi_i$ 
+, $\beta$’s, and X0s. Make sure you are modeling the ”event” of ”being a carrier”. How many dummy variables
+do you have? How many parameters does your saturated model have? What did you
+choose as you baseline(reference) level for the explanatory variable.
+
+```{r}
+
+tonsil.size <- as.factor(c("normal", "Senlarged", "Venlarged"))
+response <- cbind(c(19, 29, 24), c(497, 560, 269))
+
+carrier.logistic <- glm(response ~ tonsil.size, family = binomial(link=logit))
+```
+
+equation:
+
+$\hat{pi_i} = \frac{exp(\beta_0 + \beta_1 X_1 + \beta_2 X_2)}{1+exp(\beta_0 + \beta_1 X_1 + \beta_2 X_2)}$
+
+Current model has 2 dummy variables.
+
+The model has 3 parameters $\beta_0 , \beta_1, \beta_2$. 
+
+The baseline in chosen to be normal tonsil size.
+
+
+## (b) 
+Report the estimated model, and more specifically report the estimated coefficients
+and standard errors. Interpret exp ($\beta$ 1) and report 95% confidence interval for exp ($\beta$ 1).
+How about $\beta$ 2?
+
+```{r}
+carrier.logistic
+
+
+1-pchisq(carrier.logistic$null.deviance,carrier.logistic$df.null)
+
+
+```
+
+
+$\hat{\pi_i} = \frac{exp(-3.2642 + 0.3035 X_1 + 0.8475 X_2)}{1+exp(-3.2642 + 0.3035 X_1 + 0.8475 X_2)}$
+
+
+$exp(\beta_1) = \frac{odds of slightly enlarged tonsil}{odds of normal tonsil}$
+
+$exp(\beta_2) = \frac{odds of very enlarged tonsil}{odds of normal tonsil}$
+
+
+Cofidence interval:
+
+$\beta_1: (`r 0.3035 - 1.96 * 0.3015` , `r 0.3035 + 1.96 * 0.3015` )$
+
+$\beta_2: (`r 0.8475 - 1.96 * 0.3163` , `r 0.8475 - 1.96 * 0.3163` )$
+
+
+## (c) 
+Does the model appear to fit the data? Perform an overall goodness-of-fit test and
+comment on the results. Is this test trustworthy?
+
+```{r}
+
+summary(carrier.logistic)
+1-pchisq(carrier.logistic$null.deviance,carrier.logistic$df.null)
+#anova(carrier.logistic)
+```
+To check the overal fit of the model we have to look at null model deviance and residual deviance (saturated model). The residual deviance for the staturated model is almost zero, this means the saturated model is a good fit( as expected). The null deviance is equal to 7.32 with p-value 0.0257 which is significant which indicated the null model is not a good fit.
+The goodness of fit statistics is valid when the cell count are sufficiently large and expceted values are $\ge$ 5 and $n_i - \hat{\mu}_i \ge 5$ at leat 80% of the times.
+
+Also,the hypothesis testing for indidual parametres whos that the we can't reject the null hypothesis that $\beta_1$ is equal to zero (p-value = 0.314). 
+
+## (d) 
+How do results from this model compare to your conclusions from homework 4?
+
+Both showed that the being  a carrier and tosil size have a strong relationship. also they both confirm that the risk being a carrier is much higher when tonsil is very large.
+
+## (e) 
+What is the predicted probability of a child being a carrier if she has ”very enlarged”
+tonsils? P(A child being a carrier | having very enlarged tonsils)
+
+$P(carrier| very large tonsil)  = \frac{exp(-3.2642+0.8475))}{1+exp(-3.2642+0.8475)}= `r exp(-3.2642+0.8475)/(1+exp(-3.2642+0.8475))`$
+
+
+
+# Problem 4
+
+
+$\frac{spouse}{others} = \frac{  \frac{spouse}{alone} }{  \frac{others}{alone} } =\frac{2.02}{1.71} = `r 2.02/1.71`$
+
+$\frac{25k+}{10k-25k} = \frac{  \frac{25k+}{<10k} }{  \frac{10k-25k}{<10k} } =\frac{0.41}{0.72} = `r 0.41/0.72`$
+
+
+# Problem 5
+
+```{r}
+setwd("~/Dropbox/spring2016/discretDataAnalysis/hw_solutions/hw6")
+montana <- read.csv("montana.csv", header = T, na.strings = ".")
+#montana <- na.omit(montana)
+attach(montana)
+require(ResourceSelection)
+```
+
+## a
+```{r}
+inc_pol <- xtabs(data=montana, ~Sex+Stat)
+inc_pol 
+
+stat <- as.factor(c(0,1))
+response <- cbind(c(58, 60), c(41,22))
+stat.sex <- glm(response ~ stat, family = binomial(link=logit))
+summary(stat.sex)
+
+```
+the null model deviance is large (p-value=.039), the null model is not a good fit. The current model residual deviance is zero and the model fits well. 
+
+The Women are more likely to have postiive outlook.
+
+
+# b
+
+```{r}
+attach(montana)
+montana$Age = as.factor(montana$Age) #2 factors
+montana$Sex = as.factor(montana$Sex) 
+montana$Inc = as.factor(montana$Inc)
+montana$Pol = as.factor(montana$Pol)
+montana$Area = as.factor(montana$Area) # 3 factors
+montana$Fin = as.factor(montana$Fin) #3 factors
+montana$Stat = as.factor(montana$Stat)
+```
+
+```{r}
+stat.logistic <- glm(Stat ~ ., data=montana, family=binomial(link=logit))
+summary(stat.logistic)
+
+#Hoslem.test
+
+hoslem.test(stat.logistic$y, stat.logistic$fitted.values)
+
+```
+
+The pearson $\chi^2$ value is 11.5 with df=8 (p-value > 0.05) we can't reject the null hypothesis and the model fits well.
+pia
+# c
+
+```{r}
+mont <- na.omit(montana)
+stat.logistic2 <- glm(Stat ~ ., data=mont, family=binomial(link=logit))
+step(stat.logistic2, direction = "backward")
+```
+The variable income is not in the step 1 while it is inside step 0.
+
+variables age, area, sex, and fin are in the final model. the residual deviance in this smaller model is not much larger than saturated model in part (b).
+
+
+# 6 
+
+## a 
+
+full model -> df = 0
+
+$log(\pi / (1-\pi)) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \beta_4 X_4 + \beta_5 X_1 X_3 + \beta_6 X_1 X_4 + \beta_7 X_2 X_3+ \beta_8 X_2 X_4$
+
+
+# b
+
+$log(\pi / (1-\pi)) = \beta_0 + \beta_1 X_1 + \beta_2 X_2$
+
+df = 6
+
+# c 
+
+$log(\pi / (1-\pi)) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \beta_4 X_4$
+
+df = 4

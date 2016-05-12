@@ -1,0 +1,813 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{42,33,28}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.26,0.66,0.93}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.74,0.68,0.62}{\underline{{#1}}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.27,0.67,0.26}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.27,0.67,0.26}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.27,0.67,0.26}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.02,0.61,0.04}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.02,0.61,0.04}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.00,0.40,1.00}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.74,0.68,0.62}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,1.00,0.00}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{1.00,0.58,0.35}{\textbf{{#1}}}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.74,0.68,0.62}{{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.74,0.68,0.62}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.74,0.68,0.62}{{#1}}}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={Mohammad Mottahedi},
+            pdftitle={Final Exam},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Final Exam}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Mohammad Mottahedi}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{May 5, 2016}
+
+
+
+\begin{document}
+
+\maketitle
+
+
+\section{Problem 1}\label{problem-1}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  \textbf{F} Overdispersion and latent variables can be used to deal
+  with unobserved but predictive variables in a model.
+\item
+  \textbf{F} The quasi-symmetry model requires that marginal
+  distributions be equal.
+\item
+  \textbf{F} The adjacent-category logit model and proportional-odds
+  cumulative-logit model are reparameterizations of each other and give
+  equivalent conclusions.
+\item
+  \textbf{T} A loglinear model with a structural zero fit by adding an
+  indicator function, and the same model with the same indicator
+  function but a 7 in place of the structural zero, will give the same
+  estimate for the rest of the parameters (those not corresponding to
+  the indicator function).
+\item
+  \textbf{F} In a proportional-odds cumulative-logit model for a 2 × 5
+  table (where the second variable is ordinal), the odds ratio comparing
+  levels 1 and 2 of the second variable is the same as that comparing
+  levels 2 and 4.
+\item
+  \textbf{T} A negative binomial GLM is often used as an alternative to
+  Poisson regression with an overdispersion parameter
+\end{enumerate}
+
+\section{Problem 2}\label{problem-2}
+
+\subsection{part a}\label{part-a}
+
+\begin{verbatim}
+##             year10
+## year1        birch oak-others
+##   birch        201        154
+##   oak-others   114        266
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  McNemar's Chi-squared test
+## 
+## data:  tree_a
+## McNemar's chi-squared = 5.9701, df = 1, p-value = 0.01455
+\end{verbatim}
+
+\begin{verbatim}
+             | year10 
+       year1 |      birch | oak-others |  Row Total | 
+-------------|------------|------------|------------|
+       birch |        201 |        154 |        355 | 
+             |     15.689 |     11.767 |            | 
+             |      0.566 |      0.434 |      0.483 | 
+             |      0.638 |      0.367 |            | 
+             |      0.273 |      0.210 |            | 
+-------------|------------|------------|------------|
+  oak-others |        114 |        266 |        380 | 
+             |     14.657 |     10.993 |            | 
+             |      0.300 |      0.700 |      0.517 | 
+             |      0.362 |      0.633 |            | 
+             |      0.155 |      0.362 |            | 
+-------------|------------|------------|------------|
+Column Total |        315 |        420 |        735 | 
+             |      0.429 |      0.571 |            | 
+-------------|------------|------------|------------|
+\end{verbatim}
+
+\(H_0 = \pi_{1,2} = \pi_{1,2}\)
+
+\(\chi^2 =5.6754\) , \(df = 1\), \(p-value=0.0172\)
+
+based on the p-value \(P(\chi^2 \ge 5.6) \approx 0\) there is a strong
+evidence that number of birch and non birch trees has change over time.
+
+\subsection{part b}\label{part-b}
+
+The quasi-independence model for 3x3 table:
+
+\begin{verbatim}
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  4.58255    0.23940  19.142  < 2e-16 ***
+year1oak     0.04225    0.23332   0.181  0.85629    
+year1other  -2.09618    0.22385  -9.364  < 2e-16 ***
+year10oak    0.28512    0.24294   1.174  0.24054    
+year10other -1.40522    0.19915  -7.056 1.71e-12 ***
+ibirch       0.76456    0.24915   3.069  0.00215 ** 
+ioak         0.25486    0.24995   1.020  0.30789    
+iother       2.83088    0.28423   9.960  < 2e-16 ***
+---
+Null deviance: 563.476  on 8  degrees of freedom
+Residual deviance:  17.156  on 1  degrees of freedom
+AIC: 84.56
+\end{verbatim}
+
+The model doesn't seem to fit well \(P(\chi^2 \ge 17.156)\), \(df=1\),
+\(P(\chi^2 \ge 17.156) = 3.4432007\times 10^{-5}\).
+
+\subsection{part c}\label{part-c}
+
+fitting quasi-symmetry:
+
+\begin{verbatim}
+Coefficients: (5 not defined because of singularities)
+                 Estimate Std. Error z value Pr(>|z|)    
+(Intercept)        4.1589     0.1250  33.271  < 2e-16 ***
+year1_birchTRUE   -1.6015     0.2891  -5.540 3.03e-08 ***
+year1_oakTRUE     -1.7521     0.3047  -5.751 8.88e-09 ***
+year1_otherTRUE        NA         NA      NA       NA    
+year10_birchTRUE  -1.8465     0.3147  -5.867 4.44e-09 ***
+year10_oakTRUE    -1.9726     0.3285  -6.005 1.91e-09 ***
+year10_otherTRUE       NA         NA      NA       NA    
+symm1              2.4672     0.4828   5.110 3.22e-07 ***
+symm4              0.3767     0.1039   3.624  0.00029 ***
+symm6                  NA         NA      NA       NA    
+symm2              1.0654     0.2712   3.928 8.55e-05 ***
+symm5                  NA         NA      NA       NA    
+symm3                  NA         NA      NA       NA    
+
+Null deviance: 1.0221e+02  on 8  degrees of freedom
+Residual deviance: 6.0515e-03  on 1  degrees of freedom
+AIC: 56.198
+\end{verbatim}
+
+The model seem to fit well \(P(\chi^2 \ge 0.00605)\), \(df=1\),
+\(P(\chi^2 \ge 0.00605) = 0.9380017\).
+
+\subsection{part d}\label{part-d}
+
+fitting the symmetry model:
+
+goodness of fit for symmetry model:
+
+\begin{verbatim}
+Null deviance: 102.21480  on 8  degrees of freedom
+Residual deviance:   0.59276  on 3  degrees of freedom
+AIC: 52.784
+\end{verbatim}
+
+goodness-of-fit for marginal homogeneity:
+
+\(G^2(marginal homogeneity) = G^2(symmetry) -− G^2(quasi symmetry) = 0.59276 - 6.0515e-03 = 0.5867085\),
+\(df=I-1=2\)
+
+\(p-value = 0.7457579\)
+
+the marginal homogeneity fits moderately well.
+
+\subsection{part e}\label{part-e}
+
+\begin{longtable}[c]{@{}llll@{}}
+\toprule
+model & df & \(G^2\) & p-value\tabularnewline
+\midrule
+\endhead
+quasi-independence & 1 & 17.156 & 3.4432007x 10−5\tabularnewline
+symmetry & 3 & 0.59276 & \(0.8980878\)\tabularnewline
+Marginal Homogeneity & 2 & 0.5867085 & 0.7457579\tabularnewline
+quasi-symmetry & 1 & 0.00605 & 0.9380017\tabularnewline
+\bottomrule
+\end{longtable}
+
+There seems we have a strong symmetric association. The best model fit
+belongs to quasi-symmetry model. The marginal homogeneity fits
+moderately well and difference between the two likelihood ratios is not
+significant. This is in contrast with conclusion from part a, that there
+has been a change in number of birch trees after 10 years.
+
+\section{Problem 3}\label{problem-3}
+
+\subsection{part a}\label{part-a-1}
+
+fitting passion regression model:
+
+\begin{verbatim}
+Coefficients:
+                   Estimate Std. Error z value Pr(>|z|)    
+(Intercept)       3.9071756  0.2512779  15.549  < 2e-16 ***
+Price_movementup  1.6155856  0.2453932   6.584 4.59e-11 ***
+SecurityB        -1.3110020  0.2417294  -5.423 5.85e-08 ***
+SecurityC         0.6848235  0.1490582   4.594 4.34e-06 ***
+Milisecond       -0.0019280  0.0005142  -3.750 0.000177 ***
+
+Null deviance: 159.489  on 5  degrees of freedom
+Residual deviance:  11.466  on 1  degrees of freedom
+AIC: 53.025
+\end{verbatim}
+
+fitted model:
+
+\(log(\hat{\mu_i}) = 3.91 + 1.62 \times PriceMmovemenet - 1.311 \times Security_B + 0.68 \times Security_C - 0.002 \times Miliseconds\)
+
+model fit: \(P-value= 7.0881079\times 10^{-4}\)
+
+the \(exp(intercept) = 49.7494794\) indicates the mean of orders when
+other variables are zero.
+
+Price movement: indicates when price movement is up number of order is
+going to increase by the order of compared to down movement
+\(exp(1.6155)= 5.0304025\)
+
+security B: indicates when security is type B compared to type A
+decreases the number of orders by factor of \(exp(-1.311)= 0.2642129\)
+
+security C: indicates when security is type C compared to type A
+increase the number of orders by factor of \(exp(0.68)= 1.9738777\)
+
+Milisecond: as length of time between transactions increases the number
+of orders decreases slightly by factor \(exp(-0.0019280)= 0.9980739\)
+
+\subsection{part b}\label{part-b-1}
+
+model fit:
+
+\(G^2 =11.466\), \(df=1\)
+
+\(P-value= 7.0881079\times 10^{-4}\)
+
+all of the variables are significant and the model doesn't fit well.
+
+\subsection{part c}\label{part-c-1}
+
+setting the orders with row with (B, Down ) to zero and adding numerical
+dummy variables for the cell with zero.
+
+\begin{verbatim}
+Coefficients:
+                   Estimate Std. Error z value Pr(>|z|)    
+(Intercept)       3.528e+00  2.816e-01  12.527  < 2e-16 ***
+Price_movementup  1.692e+00  2.423e-01   6.985 2.85e-12 ***
+SecurityB        -1.711e+00  3.021e-01  -5.662 1.49e-08 ***
+SecurityC         7.061e-01  1.473e-01   4.793 1.64e-06 ***
+Milisecond       -1.487e-03  5.245e-04  -2.835  0.00458 ** 
+delta            -2.410e+01  4.225e+04  -0.001  0.99954    
+
+
+Null deviance: 2.3158e+02  on 5  degrees of freedom
+Residual deviance: 4.1224e-10  on 0  degrees of freedom
+AIC: 38.623
+\end{verbatim}
+
+The model fits is well, the coefficients are changed slightly but the
+our conclusion didn't change about the effect of main effects on the
+response.
+
+\subsection{part d}\label{part-d-1}
+
+after treating the cell (B, Down) as anomalous the, the model fit got
+better that confirm that the cell was the reason for poor fit. but the
+model parameters didn't change significantly.
+
+\section{Problem 4}\label{problem-4}
+
+\subsection{part a}\label{part-a-2}
+
+complete independence model
+
+the \(G^2=240.94\), \(df=8\) and the complete independence model does
+not fit.
+
+\subsection{part b}\label{part-b-2}
+
+Since we only have one sampling zero in the table the MLE estimates
+exists and it's always positive.
+
+\subsection{part c}\label{part-c-2}
+
+\begin{longtable}[c]{@{}ccccc@{}}
+\toprule
+\begin{minipage}[b]{0.37\columnwidth}\centering\strut
+Model\_name
+\strut\end{minipage} &
+\begin{minipage}[b]{0.07\columnwidth}\centering\strut
+G2
+\strut\end{minipage} &
+\begin{minipage}[b]{0.06\columnwidth}\centering\strut
+df
+\strut\end{minipage} &
+\begin{minipage}[b]{0.12\columnwidth}\centering\strut
+Pvalue
+\strut\end{minipage} &
+\begin{minipage}[b]{0.06\columnwidth}\centering\strut
+AIC
+\strut\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.37\columnwidth}\centering\strut
+Complete Independence
+\strut\end{minipage} &
+\begin{minipage}[t]{0.07\columnwidth}\centering\strut
+181.2
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+7
+\strut\end{minipage} &
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+250.8
+\strut\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\centering\strut
+Joint Independence XY,Z
+\strut\end{minipage} &
+\begin{minipage}[t]{0.07\columnwidth}\centering\strut
+142.8
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+5
+\strut\end{minipage} &
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+216.4
+\strut\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\centering\strut
+Joint Independence XZ,Y
+\strut\end{minipage} &
+\begin{minipage}[t]{0.07\columnwidth}\centering\strut
+165.2
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+6
+\strut\end{minipage} &
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+236.7
+\strut\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\centering\strut
+Joint Independence ZY,X
+\strut\end{minipage} &
+\begin{minipage}[t]{0.07\columnwidth}\centering\strut
+74.47
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+5
+\strut\end{minipage} &
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+1.199e-14
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+148
+\strut\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\centering\strut
+Conditional Independence XY,XZ
+\strut\end{minipage} &
+\begin{minipage}[t]{0.07\columnwidth}\centering\strut
+126.8
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+4
+\strut\end{minipage} &
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+202.3
+\strut\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\centering\strut
+Conditional Independence XY,ZY
+\strut\end{minipage} &
+\begin{minipage}[t]{0.07\columnwidth}\centering\strut
+36.06
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+3
+\strut\end{minipage} &
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+7.262e-08
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+113.6
+\strut\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\centering\strut
+Conditional Independence ZY,ZX
+\strut\end{minipage} &
+\begin{minipage}[t]{0.07\columnwidth}\centering\strut
+58.45
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+4
+\strut\end{minipage} &
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+6.147e-12
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+134
+\strut\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\centering\strut
+Homogeneous assocition
+\strut\end{minipage} &
+\begin{minipage}[t]{0.07\columnwidth}\centering\strut
+32.2
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+2
+\strut\end{minipage} &
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+1.016e-07
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+111.7
+\strut\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\centering\strut
+Saturated
+\strut\end{minipage} &
+\begin{minipage}[t]{0.07\columnwidth}\centering\strut
+0
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+0
+\strut\end{minipage} &
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0
+\strut\end{minipage} &
+\begin{minipage}[t]{0.06\columnwidth}\centering\strut
+83.55
+\strut\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+comparing homogeneous model with conditional independence model (XY,ZY):
+
+\(\Delta G^2 = 3.86\), \(df=1\), \(p-value=0.0495\)
+
+based on AIC and and p-value in the table above the homogeneous
+Association model best fit the data.
+
+The model indicates that XY does not depend on level of A, and
+association between YZ does not depend on X.
+
+\subsection{part d}\label{part-d-2}
+
+model equation:
+
+\(log(\mu_{ij}) = \lambda + \lambda_i^Y + \lambda_j^Z + \lambda_k^X + \lambda_{ij}^{YZ} + \lambda_{jk}^{ZX} + \delta_{212}I(2,1,2)\)
+
+\subsection{part e}\label{part-e-1}
+
+model equation:
+
+\(X_1 = 1\) if X=2
+
+\(X_1 = 0\) otherwise
+
+\(X_2 = 1\) if Y=2
+
+\(X_2 = 0\) otherwise
+
+\(X_3 = 1\) if Y=3
+
+\(X_3 = 0\) otherwise
+
+\(log \frac{\pi}{1-\pi} = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \delta_{212}I(2,1,2)\)
+
+\begin{verbatim}
+Coefficients:
+              Estimate Std. Error z value Pr(>|z|)
+(Intercept) -2.605e-01  1.190e+00  -0.219    0.827
+X2           5.210e-01  1.262e+00   0.413    0.680
+Y2           7.906e-01  1.614e+00   0.490    0.624
+Y3          -3.167e-16  1.426e+00   0.000    1.000
+delta       -1.862e+01  3.956e+03  -0.005    0.996
+Null deviance: 16.636  on 11  degrees of freedom
+Residual deviance: 14.737  on  7  degrees of freedom
+AIC: 24.737
+\end{verbatim}
+
+\section{Problem 5}\label{problem-5}
+
+\subsection{part a}\label{part-a-3}
+
+\(log(\mu_{ijkl}) = \lambda + \lambda_{i}^X + \lambda_{j}^{Y} + \lambda_{k}^{Z} + \lambda_{l}^{W} + \lambda_{ij}^{XY} + \lambda_{kl}^{ZW} + \lambda_{jk}^{YZ}\)
+
+\(log(\mu_{ijkl}) = \lambda + \lambda_{i}^X + \lambda_{j}^{Y} + \lambda_{k}^{Z} + \lambda_{l}^{W} + \lambda_{ij}^{XY} + \lambda_{jkl}^{YZW}\)
+
+\(df=\) \# of cells - \# unique parameters in the model
+
+model XY, YZ, ZW:
+
+\# cell = 48, \# unique parameters = 13
+
+\(df= 35\)
+
+model XY,YZW:
+
+\# cell = 48, \# unique parameters = 13
+
+\(df= 35\)
+
+\(\Delta G^2= 35 -35 = 0\)
+
+\subsection{part part b}\label{part-part-b}
+
+conditional odds ratio for fixed level of Z and W
+
+\(\theta_{XY(ZW)} = \frac{\mu_{11jl} \mu_{22jl}}{\mu_{12jl}{\mu_{21jl}}}\)
+
+for Z=2, W=1
+
+\(\theta_{XY(ZW)} = \frac{\mu_{1121} \mu_{2221}}{\mu_{1221}{\mu_{2121}}}\)
+
+we are testing conditional conditional independence between X and Y
+given Z and W are equal to 2 and 1, respectively.
+
+\((XZW, YZW)\)
+
+\subsection{part c}\label{part-c-3}
+
+\(log(\mu_{ijkl}) = \lambda + \lambda_{i}^X + \lambda_{j}^{Y} + \lambda_{k}^{Z} + \lambda_{l}^{W} + \lambda_{ij}^{XY} + \lambda_{ik}^{XZ} + \lambda_{jk}^{YZ}\)
+
+\(log(\mu_{3221}) = \lambda + \lambda_{3}^X + \lambda_{1}^{W}\)
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\section{CODE}\label{code}
+
+\subsection{Problem 2}\label{problem-2-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tree <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{201}\NormalTok{, }\DecValTok{110}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{122}\NormalTok{, }\DecValTok{175}\NormalTok{, }\DecValTok{24}\NormalTok{, }\DecValTok{32}\NormalTok{, }\DecValTok{17}\NormalTok{, }\DecValTok{50}\NormalTok{), }\DataTypeTok{ncol =} \DecValTok{3}\NormalTok{,}
+               \DataTypeTok{dimnames =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{year1 =} \KeywordTok{c}\NormalTok{(}\StringTok{"birch"}\NormalTok{, }\StringTok{"oak"}\NormalTok{, }\StringTok{"others"}\NormalTok{),}
+                               \DataTypeTok{year10 =} \KeywordTok{c}\NormalTok{(}\StringTok{"birch"}\NormalTok{, }\StringTok{"oak"}\NormalTok{, }\StringTok{"others"}\NormalTok{)))}
+
+
+\NormalTok{tree_a <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(tree[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{], tree[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{]+}\StringTok{ }\NormalTok{tree[}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{] , }
+                   \NormalTok{tree[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{]+}\StringTok{ }\NormalTok{tree[}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{], tree[}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{] +}
+\StringTok{                       }\NormalTok{tree[}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{] +}\StringTok{ }\NormalTok{tree[}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{]+}
+\StringTok{                       }\NormalTok{tree[}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{] ), }\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{,}
+                  \DataTypeTok{dimnames =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{year1 =} \KeywordTok{c}\NormalTok{(}\StringTok{"birch"}\NormalTok{, }\StringTok{"oak-others"}\NormalTok{),}
+                               \DataTypeTok{year10 =} \KeywordTok{c}\NormalTok{(}\StringTok{"birch"}\NormalTok{, }\StringTok{"oak-others"}\NormalTok{)))}
+\KeywordTok{print}\NormalTok{(tree_a)}
+\KeywordTok{mcnemar.test}\NormalTok{(tree_a, }\DataTypeTok{correct =} \NormalTok{F)}
+
+
+\NormalTok{year1 <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"birch"}\NormalTok{,}\StringTok{"oak"}\NormalTok{,}\StringTok{"other"}\NormalTok{),}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{))}
+\NormalTok{year10 =}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"birch"}\NormalTok{,}\StringTok{"oak"}\NormalTok{,}\StringTok{"other"}\NormalTok{),}\DecValTok{3}\NormalTok{)}
+\NormalTok{count=}\KeywordTok{c}\NormalTok{(}\DecValTok{210}\NormalTok{,}\DecValTok{122}\NormalTok{,}\DecValTok{32}\NormalTok{,}\DecValTok{110}\NormalTok{,}\DecValTok{175}\NormalTok{,}\DecValTok{17}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{24}\NormalTok{,}\DecValTok{50}\NormalTok{)}
+\NormalTok{year1=}\KeywordTok{factor}\NormalTok{(year1)}
+\NormalTok{year10=}\KeywordTok{factor}\NormalTok{(year10)}
+
+\CommentTok{#-------create indicator variables--------}
+\NormalTok{ibirch=(year1==}\StringTok{"birch"}\NormalTok{)*(year10==}\StringTok{"birch"}\NormalTok{)}
+\NormalTok{year1_birch=(year1==}\StringTok{"birch"}\NormalTok{)}
+\NormalTok{year1_oak=(year1==}\StringTok{"oak"}\NormalTok{)}
+\NormalTok{year1_other=(year1==}\StringTok{"other"}\NormalTok{)}
+\NormalTok{year10_birch=(year10==}\StringTok{"birch"}\NormalTok{)}
+\NormalTok{year10_oak=(year10==}\StringTok{"oak"}\NormalTok{)}
+\NormalTok{year10_other=(year10==}\StringTok{"other"}\NormalTok{)}
+\NormalTok{ioak=(year1==}\StringTok{"oak"}\NormalTok{)*(year10==}\StringTok{"oak"}\NormalTok{)}
+\NormalTok{iother=(year1==}\StringTok{"other"}\NormalTok{)*(year10==}\StringTok{"other"}\NormalTok{)}
+\NormalTok{symm3=}\DecValTok{3}\NormalTok{*(year1==}\StringTok{"other"}\NormalTok{)*(year10==}\StringTok{"other"}\NormalTok{)}
+\NormalTok{symm1=}\DecValTok{1}\NormalTok{*(year1==}\StringTok{"birch"}\NormalTok{)*(year10==}\StringTok{"birch"}\NormalTok{)}
+\NormalTok{symm4=}\DecValTok{4}\NormalTok{*(year1==}\StringTok{"oak"}\NormalTok{)*(year10==}\StringTok{"birch"}\NormalTok{)+}\DecValTok{4}\NormalTok{*(year1==}\StringTok{"birch"}\NormalTok{)*(year10==}\StringTok{"oak"}\NormalTok{)}
+\NormalTok{symm6=}\DecValTok{6}\NormalTok{*(year1==}\StringTok{"birch"}\NormalTok{)*(year10==}\StringTok{"other"}\NormalTok{)+}\DecValTok{6}\NormalTok{*(year1==}\StringTok{"other"}\NormalTok{)*(year10==}\StringTok{"birch"}\NormalTok{)}
+\NormalTok{symm2=}\DecValTok{2}\NormalTok{*(year1==}\StringTok{"oak"}\NormalTok{)*(year10==}\StringTok{"oak"}\NormalTok{)}
+\NormalTok{symm5=}\DecValTok{5}\NormalTok{*(year1==}\StringTok{"oak"}\NormalTok{)*(year10==}\StringTok{"other"}\NormalTok{)+}\DecValTok{5}\NormalTok{*(year1==}\StringTok{"other"}\NormalTok{)*(year10==}\StringTok{"oak"}\NormalTok{)}
+\NormalTok{symm=symm3+symm1+symm4+symm6+symm2+symm5}
+
+\CommentTok{#----generate dataset movies-----------}
+\NormalTok{data =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(year1,year10,count,ibirch,ioak,iother,symm)}
+
+\CommentTok{#-------contigency table------------------}
+\NormalTok{### Contigency Table}
+\NormalTok{table=}\KeywordTok{xtabs}\NormalTok{(count~year1 +}\StringTok{ }\NormalTok{year10)}
+
+\KeywordTok{options}\NormalTok{(}\DataTypeTok{contrast=}\KeywordTok{c}\NormalTok{(}\StringTok{"contr.treatment"}\NormalTok{,}\StringTok{"contr.poly"}\NormalTok{))}
+
+\NormalTok{model_2_b <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(count ~}\StringTok{ }\NormalTok{year1 +}\StringTok{ }\NormalTok{year10 +}\StringTok{ }\NormalTok{ibirch +}\StringTok{ }\NormalTok{ioak +}\StringTok{ }\NormalTok{iother, }\DataTypeTok{family=}\KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+
+\NormalTok{model_2_c <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(count ~}\StringTok{ }\NormalTok{year1_birch +}\StringTok{ }\NormalTok{year1_oak +}\StringTok{ }\NormalTok{year1_other +}
+\StringTok{                     }\NormalTok{year10_birch +}\StringTok{ }\NormalTok{year10_oak +}\StringTok{ }\NormalTok{year10_other +}\StringTok{ }
+\StringTok{                     }\NormalTok{symm1+symm4+symm6+symm2+symm5+symm3,}
+                     \DataTypeTok{family=}\KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+
+\NormalTok{model_2_d <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(count ~}\StringTok{ }\NormalTok{symm1+symm4+symm6+symm2+symm5+symm3,}
+                     \DataTypeTok{family=}\KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Probelem 3}\label{probelem-3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat_3 <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Milisecond =} \KeywordTok{c}\NormalTok{(}\DecValTok{673}\NormalTok{, }\DecValTok{539}\NormalTok{, }\DecValTok{843}\NormalTok{, }\DecValTok{974}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{350}\NormalTok{),}
+                    \DataTypeTok{Orders =} \KeywordTok{c}\NormalTok{(}\DecValTok{68}\NormalTok{, }\DecValTok{15}\NormalTok{,}\DecValTok{107}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{22}\NormalTok{, }\DecValTok{41}\NormalTok{),}
+                    \DataTypeTok{Price_movement =} \KeywordTok{c}\NormalTok{(}\StringTok{"up"}\NormalTok{,}\StringTok{"up"}\NormalTok{,}\StringTok{"up"}\NormalTok{,}\StringTok{"down"}\NormalTok{,}\StringTok{"down"}\NormalTok{,}\StringTok{"down"}\NormalTok{),}
+                    \DataTypeTok{Security =} \KeywordTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{,}\StringTok{"B"}\NormalTok{,}\StringTok{"C"}\NormalTok{, }\StringTok{"A"}\NormalTok{,}\StringTok{"B"}\NormalTok{,}\StringTok{"C"}\NormalTok{))}
+
+
+\NormalTok{model_3_a <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Orders ~}\StringTok{ }\NormalTok{Price_movement +}\StringTok{ }\NormalTok{Security +}\StringTok{ }\NormalTok{Milisecond,}
+                 \DataTypeTok{data =} \NormalTok{dat_3, }\DataTypeTok{family =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log) )}
+
+\NormalTok{dat_3_c <-}\StringTok{ }\NormalTok{dat_3}
+
+\NormalTok{dat_3_c$Orders[}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\DecValTok{0} 
+
+\NormalTok{delta <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{6}\NormalTok{)}
+
+\NormalTok{delta[}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\DecValTok{1}
+
+\NormalTok{model_3_c <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Orders ~}\StringTok{ }\NormalTok{Price_movement +}\StringTok{ }\NormalTok{Security +}\StringTok{ }\NormalTok{Milisecond +}\StringTok{ }\NormalTok{delta,}
+                 \DataTypeTok{data =} \NormalTok{dat_3_c, }\DataTypeTok{family =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link =} \NormalTok{log) )}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Probelem 4}\label{probelem-4}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+\NormalTok{Y <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)}
+\NormalTok{Z <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+
+\NormalTok{table <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{Y=}\NormalTok{Y,}\DataTypeTok{Z=}\NormalTok{Z,}\DataTypeTok{X=}\NormalTok{X)}
+\NormalTok{count <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{28}\NormalTok{,}\DecValTok{67}\NormalTok{,}\DecValTok{93}\NormalTok{,}\DecValTok{84}\NormalTok{,}\DecValTok{20}\NormalTok{,}\DecValTok{74}\NormalTok{, }\DecValTok{7}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{46}\NormalTok{,}\DecValTok{77}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{23}\NormalTok{)}
+\NormalTok{table <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(table,}\DataTypeTok{count =}\NormalTok{count)}
+\NormalTok{table <-}\StringTok{ }\KeywordTok{xtabs}\NormalTok{(count ~}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{Z +}\StringTok{ }\NormalTok{X, }\DataTypeTok{data =} \NormalTok{table)}
+\NormalTok{df <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(table)}
+
+\NormalTok{model_4_a <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Freq~}\StringTok{ }\NormalTok{X +}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{Z, }\DataTypeTok{data =} \NormalTok{df, }\DataTypeTok{family  =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+
+
+
+\CommentTok{# complete indendenet model}
+\NormalTok{model_4_a_1 <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Freq~}\StringTok{ }\NormalTok{X +}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{Z, }\DataTypeTok{data =} \NormalTok{df, }\DataTypeTok{family  =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+\CommentTok{# Join independent model}
+\NormalTok{## (XY,Z)}
+\NormalTok{model_4_a_2 <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Freq~}\StringTok{ }\NormalTok{X +}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{Z +}\StringTok{ }\NormalTok{X*Y, }
+                    \DataTypeTok{data =} \NormalTok{df, }\DataTypeTok{family  =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+\NormalTok{##(XZ,Y)}
+\NormalTok{model_4_a_3 <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Freq~}\StringTok{ }\NormalTok{X +}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{Z +}\StringTok{ }\NormalTok{X*Z, }
+                    \DataTypeTok{data =} \NormalTok{df, }\DataTypeTok{family  =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+\NormalTok{##(ZY,X)}
+\NormalTok{model_4_a_4 <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Freq~}\StringTok{ }\NormalTok{X +}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{Z +}\StringTok{ }\NormalTok{Z*Y, }
+                    \DataTypeTok{data =} \NormalTok{df, }\DataTypeTok{family  =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+\CommentTok{# conditional independence model }
+\NormalTok{##(XY,XZ)}
+\NormalTok{model_4_a_5 <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Freq~}\StringTok{ }\NormalTok{X +}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{Z +}\StringTok{ }\NormalTok{X*Y +}\StringTok{ }\NormalTok{X*Z, }
+                    \DataTypeTok{data =} \NormalTok{df, }\DataTypeTok{family  =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+\NormalTok{##(XY,ZY)}
+\NormalTok{model_4_a_6 <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Freq~}\StringTok{ }\NormalTok{X +}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{Z +}\StringTok{ }\NormalTok{X*Y +}\StringTok{ }\NormalTok{Z*Y, }
+                    \DataTypeTok{data =} \NormalTok{df, }\DataTypeTok{family  =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+
+\NormalTok{##(ZY,ZX)}
+\NormalTok{model_4_a_7 <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Freq~}\StringTok{ }\NormalTok{X +}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{Z +}\StringTok{ }\NormalTok{Z*Y +}\StringTok{ }\NormalTok{Z*X, }
+                    \DataTypeTok{data =} \NormalTok{df, }\DataTypeTok{family  =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+\CommentTok{# Homogeneous association model}
+\NormalTok{model_4_a_8 <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Freq~}\StringTok{ }\NormalTok{X +}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{Z +}\StringTok{ }\NormalTok{X*Y +}\StringTok{ }\NormalTok{Y*Z +}\StringTok{ }\NormalTok{X*Z, }
+                    \DataTypeTok{data =} \NormalTok{df, }\DataTypeTok{family  =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+\CommentTok{# Saturated model}
+\NormalTok{model_4_a_9 <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Freq~}\StringTok{ }\NormalTok{X +}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{Z +}\StringTok{ }\NormalTok{X*Y +}\StringTok{ }\NormalTok{Y*Z +}\StringTok{ }\NormalTok{X*Z +}\StringTok{ }\NormalTok{X*Y*Z,}
+                   \DataTypeTok{data =} \NormalTok{df, }\DataTypeTok{family  =} \KeywordTok{poisson}\NormalTok{(}\DataTypeTok{link=}\NormalTok{log))}
+
+\NormalTok{model_name <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Complete Independence"}\NormalTok{,}\StringTok{"Joint Independence XY,Z "}\NormalTok{, }
+                \StringTok{"Joint Independence XZ,Y"}\NormalTok{, }\StringTok{"Joint Independence ZY,X"}\NormalTok{,}
+                \StringTok{"Conditional Independence XY,XZ"}\NormalTok{, }\StringTok{"Conditional Independence XY,ZY"}\NormalTok{, }
+                \StringTok{"Conditional Independence ZY,ZX"}\NormalTok{, }\StringTok{"Homogeneous assocition"}\NormalTok{, }\StringTok{"Saturated"}\NormalTok{)}
+
+\NormalTok{G2 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(model_4_a_1$deviance,model_4_a_2$deviance,model_4_a_3$deviance,}
+        \NormalTok{model_4_a_4$deviance,model_4_a_5$deviance,model_4_a_6$deviance,}
+        \NormalTok{model_4_a_7$deviance,model_4_a_8$deviance,model_4_a_9$deviance)}
+
+\NormalTok{model_df <-}\StringTok{ }\KeywordTok{c}\NormalTok{(model_4_a_1$df.residual,model_4_a_2$df.residual,model_4_a_3$df.residual,}
+        \NormalTok{model_4_a_4$df.residual,model_4_a_5$df.residual,model_4_a_6$df.residual,}
+        \NormalTok{model_4_a_7$df.residual,model_4_a_8$df.residual,model_4_a_9$df.residual)}
+
+\NormalTok{AIC <-}\StringTok{ }\KeywordTok{c}\NormalTok{(model_4_a_1$aic,model_4_a_2$aic,model_4_a_3$aic,}
+        \NormalTok{model_4_a_4$aic,model_4_a_5$aic,model_4_a_6$aic,}
+        \NormalTok{model_4_a_7$aic,model_4_a_8$aic,model_4_a_9$aic)}
+
+\NormalTok{pvalue <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{9}\NormalTok{)}
+
+
+\NormalTok{for (i in }\DecValTok{1}\NormalTok{:}\DecValTok{9}\NormalTok{)\{}
+    \NormalTok{pvalue[i] <-}\StringTok{ }\DecValTok{1} \NormalTok{-}\StringTok{ }\KeywordTok{pchisq}\NormalTok{(G2[i], model_df[i])}
+\NormalTok{\}}
+
+\NormalTok{model_summary <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Model_name =}\NormalTok{model_name,}
+                            \DataTypeTok{G2=}\KeywordTok{round}\NormalTok{(G2,}\DecValTok{2}\NormalTok{), }\DataTypeTok{df=}\NormalTok{model_df, }\DataTypeTok{Pvalue=}\NormalTok{pvalue, }\DataTypeTok{AIC=}\NormalTok{AIC)}
+
+\KeywordTok{pander}\NormalTok{(model_summary)}
+
+
+
+\NormalTok{delta <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{12}\NormalTok{)}
+\NormalTok{delta[}\DecValTok{8}\NormalTok{] <-}\StringTok{ }\DecValTok{1}
+
+\NormalTok{model_4_e <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Z ~}\StringTok{ }\NormalTok{X +}\StringTok{ }\NormalTok{Y +}\StringTok{ }\NormalTok{delta,}\DataTypeTok{data =} \NormalTok{df, }\DataTypeTok{family  =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link=}\StringTok{"logit"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\end{document}

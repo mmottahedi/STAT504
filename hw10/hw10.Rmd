@@ -1,0 +1,258 @@
+---
+title: "hw10"
+author: "Mohammad Mottahedi"
+date: "April 4, 2016"
+output: pdf_document
+---
+
+```{r}
+set.seed(1234)
+library(vcd)
+setwd('~/Dropbox/spring2016/discretDataAnalysis/hw_solutions/hw10/')
+```
+
+
+# Problem 1
+
+\subsection{part a}
+
+$log(\mu_{ij}) = \lambda + \lambda_{i}^{Inc} + \lambda_{j}^{Pol}$
+
+
+$log(\mu_{11}) = \lambda + \lambda_{1}^{Inc} + \lambda_{1}^{Pol}$
+
+```{r}
+montana <- read.csv("montana.csv", header = T, na.strings = ".")
+montana <- na.omit(montana)
+attach(montana)
+
+```
+```{r}
+inc_pol <- xtabs(data=montana, ~Inc+Pol)
+inc_pol
+model <- loglin(inc_pol, list(c(1,2)), fit=T, param=T)
+#model
+inc_pol <- as.data.frame(inc_pol)
+model <- glm(Freq ~ Inc + Pol, data = inc_pol,  family = poisson())
+summary(model)
+
+# fit
+1 - pchisq(model$deviance, 1)
+
+```
+p-value is < 0.05 we can reject the null hypothesis of independence. 
+
+$log(\mu_{11}) = \lambda + \lambda_{1}^{Inc} + \lambda_{1}^{Pol}$
+$ = 2.78 + 0 + 0= 2.78$
+
+$\mu_{11}= e^{2.78} = `r exp(2.78)`$
+
+Since we rejected the null hypothesis of independence we can say that income and political affiliation are related.
+
+
+\subsection{part b}
+
+We ignored other variables in the dataset.
+
+\subsection{part c}
+
+$log(\mu_{ij}) = \lambda + \lambda_{i}^{Inc} + \lambda_{j}^{Pol} + \lambda_{ij}^{Pol,Inc}$
+
+
+```{r}
+sat.model <- glm(Freq ~ Inc + Pol + Inc * Pol ,
+                 data = inc_pol,  family = poisson())
+summary(sat.model)
+
+```
+The saturated model is the most colplex model, the residual deviance is almost 0 
+and the model fits perfectly to the observed data, but all the interaction term in the saturated model are insignificant (p-value >0.5) except one. We can pick the independence model.
+
+calculated odds ratio:
+
+$log(\frac{\mu_{11}\mu_{22}}{\mu_{12}\mu_{21}}) = \lambda_{11}^{Inc,Pol} + \lambda_{22}^{Inc,Pol} - \lambda_{12}^{Inc,Pol} - \lambda_{21}^{Pol,Inc} = `r 1.113 `, exp()= `r exp(1.113)`$
+
+$log(\frac{\mu_{12}\mu_{23}}{\mu_{13}\mu_{22}}) = \lambda_{12}^{Inc,Pol} + \lambda_{23}^{Inc,Pol} - \lambda_{13}^{Inc,Pol} - \lambda_{22}^{Pol,Inc} = `r 0.47928- 1.11300`, exp()= `r exp(0.47928- 1.11300)`$
+
+$log(\frac{\mu_{21}\mu_{32}}{\mu_{31}\mu_{22}}) = \lambda_{21}^{Inc,Pol} + \lambda_{32}^{Inc,Pol} - \lambda_{31}^{Inc,Pol} - \lambda_{22}^{Pol,Inc}= `r 0.01439- 1.11300`, exp()= `r exp(0.01439- 1.11300)`$
+
+$log(\frac{\mu_{22}\mu_{33}}{\mu_{23}\mu_{32}}) = \lambda_{22}^{Inc,Pol} + \lambda_{33}^{Inc,Pol} - \lambda_{23}^{Inc,Pol} - \lambda_{32}^{Pol,Inc}= `r 1.11300+0.35667- 0.47928-0.01439`, exp()= `r exp(1.11300+0.35667- 0.47928-0.01439)`$
+
+
+They are approximately equal to the odds ratios calculated based on the observed data. Since only 
+
+\subsection{part d}
+
+odds ratio from hw5
+
+```{r}
+inc_pol <- xtabs(data=montana, ~Inc+Pol)
+oddsratio(inc_pol, log = F)
+exp(confint(oddsratio(inc_pol)))
+```
+
+since the indendence model fits better, we reach the same conclusion as in hw5. the income and political affiliation seems to be unrelated.
+
+\subsection{part e}
+
+```{r}
+inc_pol_sex <- xtabs(data=montana, ~Inc+Pol+Sex)
+#model
+inc_pol <- as.data.frame(inc_pol)
+model <- glm(Freq ~ Inc + Pol + Sex, data = inc_pol_sex,  family = poisson())
+summary(model)
+
+homo <- glm(Freq ~ Inc + Pol + Sex + Sex*Inc + Pol*Inc + Sex*Pol, data = inc_pol_sex,  family = poisson())
+summary(homo)
+```
+
+$\Delta G^2 = `r 23.92-2.9298`$
+,$\Delta df = 8$
+
+p-value: $`r 1-pchisq(23.92-2.9298, 8)`$
+
+the model differnce between the two model is significant and the homogenous association model is a better fit compared the mutual independece model.
+
+
+\subsection{part f}
+
+(PI, SI), (PS, IS), (PI ,PS)
+
+```{r}
+inc_pol_sex <- xtabs(data=montana, ~Inc+Pol+Sex)
+#model
+inc_pol <- as.data.frame(inc_pol)
+PI.SI <- glm(Freq ~ Inc + Pol + Sex + Sex * Inc + Pol * Inc, data = inc_pol_sex,  family = poisson())
+summary(PI.SI)
+
+PS.IS <- glm(Freq ~ Inc + Pol + Sex + Sex * Pol + Inc * Sex, data = inc_pol_sex,  family = poisson())
+summary(PS.IS)
+
+PI.PS <- glm(Freq ~ Inc + Pol + Sex + Inc * Pol + Pol * Inc, data = inc_pol_sex,  family = poisson())
+summary(PI.PS)
+```
+(PI,SI) has the best fit. The result is in contrast with our conclusion form part a. From this analysis we concluded that political affiliation and sex are independent given the income level.
+
+# Problem 2
+```{r}
+data("UCBAdmissions")
+
+```
+
+\subsection{part a}
+
+
+```{r, echo=FALSE}
+
+#------saturated model-----------
+berk.sat <- glm(Freq ~ Admit * Gender * Dept,data = UCBAdmissions, family = poisson())
+# summary(berk.sat)
+
+#--------(D,SA)------------------
+D.SA <- glm(Freq ~ Admit + Gender + Dept + Gender * Admit, data = UCBAdmissions, family = poisson())
+summary(D.SA)
+sum(residuals(D.SA, type = "pearson")^2)
+#--------(DA,S)------------------
+DA.S <- glm(Freq ~ Admit + Gender + Dept + Dept * Admit, data = UCBAdmissions, family = poisson())
+summary(DA.S)
+sum(residuals(DA.S, type = "pearson")^2)
+#--------(DS,DA)------------------
+DS.DA <- glm(Freq ~ Admit + Gender + Dept + Dept * Gender + Dept * Admit, data = UCBAdmissions, family = poisson())
+summary(DS.DA)
+sum(residuals(DS.DA, type = "pearson")^2)
+#--------(DA,SA)------------------
+DA.SA <- glm(Freq ~ Admit + Gender + Dept + Dept * Admit + Gender * Admit, data = UCBAdmissions, family = poisson())
+summary(DA.SA)
+sum(residuals(DA.SA, type = "pearson")^2)
+
+```
+
+
+|Model| df | $G^2$| p-value| $x^2$ | pvalue|
+|-----|----|----|--------|----|--------|
+|(D, S, A)| 16| 2097.2 | <.001 |1999.6| <.001|
+|(DS, A)| 11 |876.6 |  <.001| 797.1  | <.001|
+|(D, SA)|15|2650.1|$`r 1-pchisq(2650.1,15)`$|1748.16|$`r 1-pchisq(1748.16,15)`$|
+|(DA, S)|11|1242.4|$`r 1-pchisq(1242.4,11)`$|1427.4|$`r 1-pchisq(1427.4,11)`$|
+|(DS, SA)| 10 |782.65| <.001| 714.30  | <.001|
+|(DS, DA)|6|21.736|$`r 1-pchisq(21.736,6)`$|19.93841|$`r 1-pchisq(19.93841,6)`$|
+|(DA, SA)|10|1148.9|$`r 1-pchisq(1148.9,10)`$|1015.707|$`r 1-pchisq(1015.707,10)`$|
+|(DS, DA, SA)| 5| 20.23| <.01| 18.83 |<.01|
+|(DSA)| 0| 0|- |- |- |
+
+The (DS,DA) and (DS,DA,SA) model have the best fits. The conditional independece model is less complex which might generalize better.
+
+\subsection{part b}
+
+|Model| df | $G^2$| p-value| $H_0$ | $Delta$ df| $\Delta G^2$|
+|-----|----|------|--------|-------|-----------|-------------|
+|(DS, DA, SA)| 5| 20.23| <.01|-| - |-|
+|(DS, SA)| 10 |782.65| <.001| $\lambda{ik}^{DA}=0$| 5 | 762.42 |
+|(DS, DA)|6|21.736|$`r 1-pchisq(21.736,6)`$|$\lambda{jk}^{SA}=0$| 1| $`r 21.736-20.23`$ |
+|(DA, SA)|10|1148.9|$`r 1-pchisq(1148.9,10)`$|$\lambda{ij}^{DS}=0$| 5|$`r 1148.9-20.23`$|
+
+for (DS,DA): $\Delta G^2 / df$ is small, we cannot reject the null hypothesis and we can conclude that the sex has no significant effect on after department is included in the model
+
+for (DA, SA): $\Delta G^2 / df$ is larg and we can conclude that department and gender are independent after considering the addmition in the model.
+
+
+
+\subsection{part c}
+
+```{r}
+anova(DS.DA)
+```
+The best model is (DS,DA). based on this model we concluded that there's no relationship between gender and admission when department is included in the model. The residual deviance is equal to 21.73 with 
+
+\subsection{part d}
+
+```{r}
+df <- as.data.frame(UCBAdmissions)
+df <- df[df$Dept != 'A',]
+
+berk.sat <- glm(Freq ~ Admit * Gender * Dept,data = df, family = poisson())
+summary(berk.sat)
+
+#--------(DS,DA,SA)------------------
+homo <- glm(Freq ~ Admit + Gender + Dept + Gender * Admit + Gender * Dept + Dept * Admit, data = df, family = poisson())
+summary(homo)
+sum(residuals(homo, type = "pearson")^2)
+#--------(DS.A)------------------
+DS.A <- glm(Freq ~ Admit + Gender + Dept + Gender * Admit, data = df, family = poisson())
+summary(DS.A)
+sum(residuals(DS.A, type = "pearson")^2)
+#--------(D,SA)------------------
+D.SA <- glm(Freq ~ Admit + Gender + Dept + Gender * Admit, data = df, family = poisson())
+summary(D.SA)
+sum(residuals(D.SA, type = "pearson")^2)
+#--------(DA,S)------------------
+DA.S <- glm(Freq ~ Admit + Gender + Dept + Dept * Admit, data = df, family = poisson())
+summary(DA.S)
+sum(residuals(DA.S, type = "pearson")^2)
+#--------(DS,DA)------------------
+DS.DA <- glm(Freq ~ Admit + Gender + Dept + Dept * Gender + Dept * Admit, data = df, family = poisson())
+summary(DS.DA)
+sum(residuals(DS.DA, type = "pearson")^2)
+#--------(DA,SA)------------------
+DA.SA <- glm(Freq ~ Admit + Gender + Dept + Dept * Admit + Gender * Admit, data = df, family = poisson())
+summary(DA.SA)
+sum(residuals(DA.SA, type = "pearson")^2)
+
+```
+
+comparing homgenous Assosciation model and the conditional independece model (DA,SA): 
+$\Delta G^2 =`r 2.6516 - 2.5564 `,\newline  with \Delta df= 1$ 
+
+the $p-value$ is equal to .75 and the difference between the two model is not significant. The answer chosen model is the same as in part c (DS,DA).
+The model fits well with residual deviance 2.65 and  $df=5$. 
+This model states that the gender and admission are independent given the department.
+```{r}
+anova(DS.DA)
+```
+All variables are significant based on the result of anova.
+
+# Problem 3
+
+The X and Y are conditionally independent.
+All terms in the saturated model that are not in the model (WXZ, WYZ) involve X and Y,
+which permits XY as a conditional association.

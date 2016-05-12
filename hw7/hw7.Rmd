@@ -1,0 +1,147 @@
+---
+title: "hw7"
+author: "Mohammad Mottahedi"
+date: "March 10, 2016"
+output: pdf_document
+---
+```{r}
+setwd("~/Dropbox/spring2016/discretDataAnalysis/hw_solutions/hw7")
+set.seed(1234)
+```
+
+# problem 1
+
+## part a
+
+```{r}
+kyphosis <- array(data= c(rep(1,17), rep(0,22)))
+age <- array(data=c(12, 15, 42, 52, 59, 73, 82, 91, 96, 105, 114,
+                    120, 121, 128, 130, 139, 157,
+                    1, 1, 2, 8, 11, 18, 22, 31, 37, 61, 72,
+                    81, 97, 112, 118, 127, 131, 140, 151, 159, 177, 206))
+
+df <- data.frame(age, kyphosis)
+
+result <- glm(kyphosis ~ age, data=df, family = binomial(link= "logit"))
+summary(result)
+```
+
+
+$logit(\pi) = -0.546 +  0.0059 (age)$
+
+Assuming the Type I error of 0.05, we can't reject the null hypothesis that $\beta_1 = 0$, so there is a strong evidence the relationship between the age and kyphosis in not significant.
+
+## part b
+
+```{r}
+
+#plot(result$linear.predictors,residuals(result, type="pearson"))
+plot(df$age, df$kyphosis)
+```
+age has higher dispersion in absence of kyphosis.
+
+The age data is ungrouped and we can assume the scale factor is equal to 1.
+
+ 
+```{r}
+overdispersion <- sum(residuals(result, type = 'pearson') ^ 2) / (dim(df)[1] - 1 )
+overdispersion
+summary(result, dispersion = overdispersion, correlation = TRUE, symbolic.cor = TRUE)
+#library(dispmod)
+#glm.binomial.disp(result, maxit = 1000)
+```
+
+## part c
+
+```{r}
+result <- glm(kyphosis ~ age + I(age^2), data=df, family = binomial(link="logit"))
+summary(result)
+```
+
+The deviance is smaller compared to prevous model and the null model. All estimated coefficient have have p-value less than 0.5 and are significant. The model deviance is still large which and the model is not a good fit (p-value= 0.108).
+
+```{r}
+
+x <- data.frame(age=1:220, age_sq=(1:220)^2)
+x["pred"] <- predict(result, x , type='response')
+x['y_hat'] <- (exp(result$coefficients[1] + result$coefficients[2]*x$age + result$coefficients[3]*x$age_sq)) / 
+    (1 + exp(result$coefficients[1] + result$coefficients[2]*x$age + result$coefficients[3]*x$age_sq))
+
+library(ggplot2)
+
+p <- ggplot(data=df, aes(x=age, y=kyphosis))+ geom_point() + geom_line(data=x,aes(x=x$age, y=x$y_hat))+ geom_abline(intercept = 0.5, slope = 0, linetype=2, color='red')
+
+print(p)
+```
+
+
+# problem 2
+
+## part a 
+
+```{r, echo=F}
+roc.plot <- function (sd, sdc, newplot = TRUE, ...) 
+{
+    sall <- sort(c(sd, sdc))
+    sens <- 0
+    specc <- 0
+    for (i in length(sall):1) {
+        sens <- c(sens, mean(sd >= sall[i], na.rm = T))
+        specc <- c(specc, mean(sdc >= sall[i], na.rm = T))
+    }
+    if (newplot) {
+        plot(specc, sens, xlim = c(0, 1), ylim = c(0, 1), type = "l", 
+            xlab = "1-specificity", ylab = "sensitivity", ...)
+        abline(0, 1)
+    }
+    else lines(specc, sens, ...)
+    npoints <- length(sens)
+    area <- sum(0.5 * (sens[-1] + sens[-npoints]) * (specc[-1] - 
+        specc[-npoints]))
+    lift <- (sens - specc)[-1]
+    cutoff <- sall[lift == max(lift)][1]
+    sensopt <- sens[-1][lift == max(lift)][1]
+    specopt <- 1 - specc[-1][lift == max(lift)][1]
+    list(area = area, cutoff = cutoff, sensopt = sensopt, specopt = specopt)
+}
+```
+
+
+```{r}
+donner <- read.csv('donner.txt', header=F, sep=' ')
+colnames(donner) <- c('age','sex','survive')
+
+result <- glm(survive ~ age + sex, data=donner, family=binomial())
+summary(result)
+
+roc.plot(result$fitted.values[donner$survive == 1], result$fitted.values[donner$survive == 0] )
+```
+
+AUC = 0.75 can be interpreted to mean that  a randomly selected person in surviver group has a 75% higher survival probability than a person not in the survival group.
+
+## part b
+
+
+```{r}
+
+train.indx <- sample(45, 35)
+test <- donner[-train.indx,]
+train <- donner[train.indx,]
+
+result <- glm(survive ~ age + sex, data=train, family=binomial())
+summary(result)
+
+roc.plot(result$fitted.values[train$survive == 1], result$fitted.values[train$survive == 0] )
+```
+
+The AUC value for the training data is equal to 0.76 which is close to the AUC predicted in part a.
+
+## part c
+
+```{r}
+
+pred <- predict(result, test[,c('age','sex')])
+roc.plot(result$fitted.values[test$survive == 1], result$fitted.values[test$survive == 0] )
+```
+```
+AUC for the test data is equal to 0.32 which is less than 0.5, which means the model is worst than randomly guessing the response values.

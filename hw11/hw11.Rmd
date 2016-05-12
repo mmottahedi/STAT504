@@ -1,0 +1,294 @@
+---
+title: "HW 11"
+author: "Mohammad Mottahedi"
+date: "April 11, 2016"
+output: 
+    pdf_document:
+      highlight: zenburn
+      toc: yes
+---
+
+# Problem 1
+
+\subsection{a}
+
+```{r}
+temp <- read.ftable(textConnection("Z z1 z2
+Y y1 y2 y3
+X 
+x1 125 7 11 5 106 18
+x2 124 6 22 3 109 9
+x3 146 6 0 2 111 0"))
+
+df <- data.frame(temp)
+
+
+# saturated model
+model <- glm(Freq ~ X + Y + Z + X*Y + X*Z + Y*Z + X*Y*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+
+# homogenous model
+model <- glm(Freq ~ X + Y + Z + X*Y + X*Z + Y*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+
+# independece model
+model <- glm(Freq ~ X + Y + Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# joint indep model (XY,Z)
+model <- glm(Freq ~ X + Y + Z + X*Y, data = df, family = poisson(link = "log"))
+summary(model)
+
+# joint independece model (XZ,Y)
+model <- glm(Freq ~ X + Y + Z + X*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# joint independece model (YZ,X)
+model <- glm(Freq ~ X + Y + Z + Y*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# cond independece model (XY,XZ)
+model <- glm(Freq ~ X + Y + Z + X*Z + X*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# cond independece model (XY,XZ)
+model <- glm(Freq ~ X + Y + Z + X*Z + X*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# cond independece model (XY,YZ)
+model <- glm(Freq ~ X + Y + Z + X*Y + Y*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# cond independece model (XZ,YZ)
+model <- glm(Freq ~ X + Y + Z + X*Z + Y*Z, data = df, family = poisson(link = "log"))
+summary(model)
+```
+The best model is conditional independece model (XY,YZ).
+
+The estimated errors are high.
+
+dropping the cells with zero counts.
+```{r}
+df = df[df$Freq != 0,]
+
+# saturated model
+model <- glm(Freq ~ X + Y + Z + X*Y + X*Z + Y*Z + X*Y*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+
+# homogenous model
+model <- glm(Freq ~ X + Y + Z + X*Y + X*Z + Y*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+
+# independece model
+model <- glm(Freq ~ X + Y + Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# joint indep model (XY,Z)
+model <- glm(Freq ~ X + Y + Z + X*Y, data = df, family = poisson(link = "log"))
+summary(model)
+
+# joint independece model (XZ,Y)
+model <- glm(Freq ~ X + Y + Z + X*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# joint independece model (YZ,X)
+model <- glm(Freq ~ X + Y + Z + Y*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# cond independece model (XY,XZ)
+model <- glm(Freq ~ X + Y + Z + X*Z + X*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# cond independece model (XY,XZ)
+model <- glm(Freq ~ X + Y + Z + X*Z + X*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# cond independece model (XY,YZ)
+model <- glm(Freq ~ X + Y + Z + X*Y + Y*Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# cond independece model (XZ,YZ)
+model <- glm(Freq ~ X + Y + Z + X*Z + Y*Z, data = df, family = poisson(link = "log"))
+summary(model)
+```
+
+
+\subsection{b}
+
+
+```{r}
+delta1 <- c(0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 1, 0, 0, 0)
+delta2 <- c(0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 1)
+
+df <- data.frame(temp)
+
+
+# saturated model
+model <- glm(Freq ~ X + Y + Z + X*Y + X*Z + Y*Z + X*Y*Z + delta1 + delta2, data = df, family = poisson(link = "log"))
+summary(model)
+
+# homogenous model
+model <- glm(Freq ~ X + Y + Z + X*Y + X*Z + Y*Z + delta1 + delta2, data = df, family = poisson(link = "log"))
+summary(model)
+
+
+# independece model
+model <- glm(Freq ~ X + Y + Z, data = df, family = poisson(link = "log"))
+summary(model)
+
+# joint indep model (XY,Z)
+model <- glm(Freq ~ X + Y + Z + X*Y + delta1 + delta2, data = df, family = poisson(link = "log"))
+summary(model)
+
+# joint independece model (XZ,Y)
+model <- glm(Freq ~ X + Y + Z + X*Z+ delta1 + delta2, data = df, family = poisson(link = "log"))
+summary(model)
+
+# joint independece model (YZ,X)
+model <- glm(Freq ~ X + Y + Z + Y*Z+ delta1 + delta2, data = df, family = poisson(link = "log"))
+summary(model)
+
+# cond independece model (XY,XZ)
+model <- glm(Freq ~ X + Y + Z + X*Y + X*Z+ delta1 + delta2, data = df, family = poisson(link = "log"))
+summary(model)
+
+# cond independece model (XY,YZ)
+model <- glm(Freq ~ X + Y + Z + X*Y + Y*Z+ delta1 + delta2, data = df, family = poisson(link = "log"))
+summary(model)
+
+# cond independece model (XZ,YZ)
+model <- glm(Freq ~ X + Y + Z + X*Z + Y*Z+ delta1 + delta2, data = df, family = poisson(link = "log"))
+summary(model)
+
+```
+
+
+# Problem 2
+
+```{r}
+temp <- read.ftable(textConnection("TonsilSize Normal Slightl-enlarged Very-enlarged
+CarrierCond
+Carrier 19 29 24
+Non-Carrier 497 560 269"))
+
+df <- data.frame(temp)
+
+options(contrast=c("contr.treatment","contr.poly"))
+
+#independece model
+model <- glm(Freq ~ CarrierCond + TonsilSize, data = df, family = poisson(link = "log"))
+
+summary(model)
+
+
+xCarrier <- rep(c(1,2), c(3,3))
+ySize <- rep(c(1,2,3), 2)
+
+#linear by linear 
+model <- glm(Freq ~ CarrierCond + TonsilSize + xCarrier * ySize,
+             data = df, family = poisson(link = "log"))
+
+summary(model)
+```
+
+the linear by linear model fits better compared to independet model.
+
+both, hw4 and linear by linear model show that being a carrier and tonsil is related.
+
+# Problem 3
+
+\subsection{a}
+
+
+
+```{r}
+
+count <- c(425, 17, 80, 36, 10, 555, 74, 47, 7, 34, 771, 33, 5, 14, 29, 452)
+
+at04 <- rep(c("N", "MW", "S", "W"), c(4,4,4,4))
+at16 <- rep(c("N", "MW", "S", "W"), 4)
+
+iN <- (at04 == "N") * (at16 == "N")
+iMW <- (at04 == "MW") * (at16 == "MW")
+iS <- (at04 == "S") * (at16 == "S")
+iW <- (at04 == "W") * (at16 == "W")
+
+
+at04_N <- (at04 == "N")
+at04_MW <- (at04 == "MW")
+at04_S <- (at04 == "S")
+at04_W <- (at04 == "W")
+
+
+at16_N <-  (at16 == "N")
+at16_MW <- (at16 == "MW")
+at16_S <-  (at16 == "S")
+at16_W <-  (at16 == "W")
+
+symm1 <- 1 * (at04 == "N") * (at16 == "N")
+symm2 <- 2 * (at04 == "MW") * (at16 == "MW")
+symm3 <- 3 * (at04 == "S") * (at16 == "S")
+symm4 <- 4 * (at04 == "S") * (at16 == "S")
+
+symm5 <- 5 * (at04 == "N") *  (at16 == "MW") + 5 * (at04 == "MW") * (at16 == "N")
+symm6 <- 6 * (at04 == "S")  * (at16 == "N") + 6*   (at04 == "N") *(at16 == "S")
+symm7 <- 7 * (at04 == "W") * (at16 == "N") + 7 *(at04 == "N") * (at16 == "W")
+symm8 <- 8 * (at04 == "S")*  (at16 == "MW")+ 8 * (at04 == "MW")* (at16 == "S")
+symm9  <- 9 *(at04 == "MW") * (at16 == "W") + 9  * (at04 == "W")* (at16 == "MW")
+symm10  <- 10 *(at04 == "S") * (at16 == "W")+ 10 * (at04 == "W")* (at16 == "S")
+
+symm=symm3+symm1+symm4+symm6+symm2+symm5+symm6 + symm7 + symm8 + symm9 + symm10
+
+df <- data.frame(at04, at16, count, iN, iMW, iW , iS , symm)
+
+df
+```
+
+### symmetry model
+
+
+```{r}
+model=glm(count~symm1+symm4+symm6+symm2+symm5+symm3+symm7 + symm8+ symm9+ symm10,data=df,family=poisson(link=log))
+summary(model)
+
+
+    
+
+
+```
+
+
+$df= 6$ 
+, $G^2 = 134.45$ , p-value $= `r 1- pchisq(134.45,6)`$
+
+symmetry model doesnot seem to be a good fit.
+
+
+###  Quasi-symmetry Model
+
+```{r}
+
+model=glm(count~at04_N + at04_W+ at04_MW+ at04_S + at16_N+ at16_W+ at16_MW+ at16_S +symm1+symm4+symm6+symm2+symm5+symm3+symm7 + symm8+ symm9+ symm10,data=df,family=poisson(link=log))
+summary(model)
+```
+$df=3$ 
+, $G^2 =  3.9324$ , p-value $= `r 1- pchisq( 3.9324,3)`$
+
+the quasi-symmetry model fits moderatlely well.
+
+\subsection{b}
+
+$G^2(marginal homogenety) = G^2(symmtery) - G^2(quasi-symmtery) = `r 134.45 - 3.932`$
+
+$df=3$ 
+
+p-value= `r 1-pchisq(134.45 - 3.932, 3)`$
+
+the marginal homgeneity model does not fit the data.
+
+
+

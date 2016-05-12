@@ -1,0 +1,91 @@
+---
+title: "Hw9"
+author: "Mohammad Mottahedi"
+date: "March 28, 2016"
+output: pdf_document
+---
+```{r}
+set.seed(1234)
+library(MASS)
+```
+
+# Problem 1
+
+\section{part a}
+
+```{r}
+imp.treat.a <- c(8, 7, 6, 6, 3, 4, 7, 2, 3, 4)
+imp.treat.b <- c(9, 9,8, 14, 8, 13, 11, 5, 7, 7)
+df <- data.frame(imperfection = c(imp.treat.a,imp.treat.b), 
+                 trearment = c(rep(1,10), rep(0,10)))
+model <- glm(imperfection ~ 1 + trearment, data = df, 
+            family = poisson(link = log))
+summary(model)
+```
+$log(\mu_A) = `r model$coefficients[1] + model$coefficients[2]`$, 
+
+$log(\mu_B) = `r model$coefficients[1]`$
+
+$\beta = log(\mu_A) - log(\mu_B) = `r model$coefficients[2]`$
+
+interpretation: The expected number of imperfection is
+$e^{\beta} = `r exp(model$coefficients[2]/model$coefficients[1])`$
+times smaller when we do treatment A.
+
+\section{part b}
+$\mu_A = \beta_0 + \beta_1, \mu_B = \beta_0$
+
+$\mu_A - \mu_B = \beta_1$
+
+$H_0 = \beta_1 = \mu_A - \mu_B = 0$
+
+$H_0 = \mu_A = \mu_B$
+
+$H_A = \mu_A \ne \mu_B$
+
+$z^2=(-0.5988/0.176)^2 = `r (-0.5988/0.176)^2`$
+
+p-value= $`r 1-pchisq((-0.5988/0.176)^2,1)` < 0.05$
+
+so we reject the null hypothesis that expected numbers are the same for both treatment and treatment type is significant.
+
+# Problem 2
+
+\section{part a}
+
+```{r}
+hv <- data.frame(age = c("<55","<55",">55",">55"),
+                 type = c("aortic","mitral","aortic","mitral"),
+                 exposure = c(1259,2082,1417,1647),
+                 deaths = c(4,1,7,9))
+lexposure = log(hv$exposure)
+model <- glm(deaths ~ age + type + type*age, offset = lexposure, data = hv, family = poisson(link = log) )
+summary(model)
+anova(model)
+```
+do you know the estimate of this value? $4$
+
+
+When you take the natural log of this estimate, which parameter estimate in your model do you expect to get?
+
+$log(\mu_1) = `r log(4)` \approx -5.7518 + log(1259) = `r -5.7518 + log(1259)`$
+
+\section{part b}
+
+with 95% confidence interval, only the intercept is significant the rest of coefficients all have P > 0.05.
+
+Given the the valve type the estimated death rate for older group is $`r exp(0.444)`$ times the younger group and given the age, group with mitral valve replacement has $`r exp(-1.8893)`$ times smaller death rate.
+
+\section{part c}
+
+to adjust for the time interval of individual observations. 
+
+\section{part d}
+
+
+```{r}
+model <- glm(deaths ~ age + type, offset = lexposure, data = hv, family = poisson(link = log) )
+summary(model)
+```
+
+The saturated model is to complex and it's probably over fit. The main effect model is more appropriate. also, the interaction term doesn't seem to be significant.
